@@ -10,15 +10,15 @@ public static class StaticFileProvider
         string? bucket = null, 
         CancellationToken cancellationToken = new())
     {
-        var bucketToFile = string.IsNullOrEmpty(bucket) 
-            ? fileName 
-            : Path.Combine(InitialBucket(bucket), fileName);
-        var rootToFile = Path.Combine(location, bucketToFile);
+        var rootToBucket = string.IsNullOrEmpty(bucket) 
+            ? location 
+            : InitialBucket(Path.Combine(location, bucket));
+        var rootToFile = Path.Combine(rootToBucket, fileName);
  
         await using var stream = new FileStream(rootToFile, FileMode.Create); 
         await file.CopyToAsync(stream, cancellationToken);
 
-        return bucketToFile;
+        return bucket is not null ? Path.Combine(bucket, fileName) : fileName;
     }
     
     private static string InitialBucket(string path)

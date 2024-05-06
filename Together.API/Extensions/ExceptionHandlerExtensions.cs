@@ -42,7 +42,7 @@ public static class ExceptionHandlerExtensions
     private static HttpStatusCode GetStatusCode(Exception ex) => ex switch
     {
         UnauthorizedAccessException => HttpStatusCode.Unauthorized,
-        DomainException => HttpStatusCode.BadRequest,
+        DomainException dEx => dEx.StatusCode,
         ValidationException => HttpStatusCode.BadRequest,
         _ => HttpStatusCode.InternalServerError
     };

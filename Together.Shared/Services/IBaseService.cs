@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Together.Shared.Helpers;
 using Together.Shared.ValueObjects;
 
 namespace Together.Shared.Services;
@@ -22,6 +21,6 @@ public class BaseService(IHttpContextAccessor httpContextAccessor) : IBaseServic
 
         return string.IsNullOrEmpty(accessToken) 
             ? default! 
-            : JwtBearerProvider.DecodeAccessToken(accessToken);
+            : UserClaimsPrincipal.DecodeAccessToken(accessToken);
     }
 }

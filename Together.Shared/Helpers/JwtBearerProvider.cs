@@ -32,28 +32,6 @@ public static class JwtBearerProvider
         var handler = new JwtSecurityTokenHandler();
         return handler.WriteToken(handler.CreateToken(descriptor));
     }
-
-    public static UserClaimsPrincipal DecodeAccessToken(string accessToken)
-    {
-        var decodedToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
-
-        var id = decodedToken.Claims.FirstOrDefault(x => x.Type.Equals("id"))?.Value.ToGuid() 
-                 ?? throw new NullReferenceException("Claim type 'id' is required");
-        var fullName = decodedToken.Claims.FirstOrDefault(x => x.Type.Equals("fullName"))?.Value 
-                       ?? throw new NullReferenceException("Claim type 'fullName' is required");
-        var username = decodedToken.Claims.FirstOrDefault(x => x.Type.Equals("username"))?.Value 
-                       ?? throw new NullReferenceException("Claim type 'username' is required");
-        var exp = decodedToken.Claims.FirstOrDefault(x => x.Type.Equals("iat"))?.Value.ToLong()
-                  ?? throw new NullReferenceException("Claim type 'username' is required");
-        
-        return new UserClaimsPrincipal
-        {
-            Id = id,
-            FullName = fullName,
-            Username = username,
-            ExpirationTime = DateTimeOffset.FromUnixTimeSeconds(exp).DateTime.ToLocalTime()
-        };
-    }
     
     public static string GenerateRefreshToken()
     {

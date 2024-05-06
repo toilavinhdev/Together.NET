@@ -5,14 +5,14 @@ namespace Together.Shared.Helpers;
 
 public static class EmailProvider
 {
-    public static async Task SmtpSendAsync(SmtpConfig config, string toMail, string title, string body)
+    public static async Task SmtpSendAsync(SmtpConfig config, SmtpMailForm form)
     {
         var mimeMessage = new MimeMessage();
         mimeMessage.Sender = new MailboxAddress(config.DisplayName, config.Mail);
         mimeMessage.From.Add(new MailboxAddress(config.DisplayName, config.Mail));
-        mimeMessage.To.Add(MailboxAddress.Parse(toMail));
-        mimeMessage.Subject = title;
-        mimeMessage.Body = new TextPart("html") { Text = body };
+        mimeMessage.To.Add(MailboxAddress.Parse(form.To));
+        mimeMessage.Subject = form.Title;
+        mimeMessage.Body = new TextPart("html") { Text = form.Body };
         
         using var smtp = new MailKit.Net.Smtp.SmtpClient();
         
@@ -27,4 +27,13 @@ public static class EmailProvider
             throw new ApplicationException("Có lỗi xảy ra", ex);
         }
     }
+}
+
+public class SmtpMailForm
+{
+    public string To { get; set; } = default!;
+
+    public string Title { get; set; } = default!;
+
+    public string Body { get; set; } = default!;
 }

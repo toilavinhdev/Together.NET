@@ -32,10 +32,22 @@ public static class StringExtensions
     public static string ToSha256(this string input)
     {
         if (string.IsNullOrEmpty(input)) return default!;
-        var hashed = SHA256.HashData(Encoding.UTF8.GetBytes(input));
+        var data = SHA256.HashData(Encoding.UTF8.GetBytes(input));
         var stringBuilder = new StringBuilder();
-        foreach (var byteCode in hashed)
+        foreach (var byteCode in data)
             stringBuilder.Append(byteCode.ToString("X2"));
         return stringBuilder.ToString();
+    }
+    
+    public static string To16Md5(this string value) => value.To32Md5().Substring(8, 16);
+    
+    public static string To32Md5(this string input)
+    {
+        if (string.IsNullOrEmpty(input)) return default!;
+        var data = MD5.HashData(Encoding.UTF8.GetBytes(input));
+        var builder = new StringBuilder();
+        foreach (var byteCode in data)
+            builder.Append(byteCode.ToString("X2"));
+        return builder.ToString();
     }
 }
