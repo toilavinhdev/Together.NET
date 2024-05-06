@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Together.Application.Features.FeatureUser.Exceptions;
-using Together.Domain.Abstractions;
 using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
 using Together.Shared.Constants;
@@ -53,7 +52,7 @@ public class ForgotPasswordCommand : ICommand
             await context.UserTokens.AddAsync(userToken, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
             
-            var validateUrl = new UriBuilder($"{appSettings.Host}/api/auth/forgot-password/{user.Id}/{token}").Uri.ToString();
+            var validateUrl = new UriBuilder($"{appSettings.ClientHost}/auth/forgot-password/{user.Id}/{token}").Uri.ToString();
             await EmailProvider.SmtpSendAsync(appSettings.SmtpConfig, new SmtpMailForm
             {
                 To = request.Email,

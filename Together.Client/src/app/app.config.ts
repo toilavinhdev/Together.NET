@@ -11,12 +11,24 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { accessTokenInterceptor } from '~core/interceptors';
+import {
+  AuthEffects,
+  authReducer,
+  featureAuthKey,
+} from '~features/feature-auth/store';
 
 registerLocaleData(en);
+
+const stores = {
+  [featureAuthKey]: authReducer,
+};
+
+const effects = [AuthEffects];
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,9 +36,9 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(),
-    provideStore(),
-    provideEffects(),
+    provideHttpClient(withInterceptors([accessTokenInterceptor])),
+    provideStore(stores),
+    provideEffects(effects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

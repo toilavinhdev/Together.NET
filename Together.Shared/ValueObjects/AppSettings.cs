@@ -6,6 +6,8 @@ public sealed class AppSettings
 {
     public string Host { get; set; } = default!;
     
+    public string ClientHost { get; set; } = default!;
+    
     public StaticFileConfig StaticFileConfig { get; set; } = default!;
 
     public SQLServerConfig SqlServerConfig { get; set; } = default!;

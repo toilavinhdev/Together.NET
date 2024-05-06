@@ -1,0 +1,79 @@
+<div class="flex items-center justify-center min-h-screen">
+  <div class="flex bg-white w-[800px] shadow-md rounded-md">
+
+    <!-- Wrapper left -->
+    <div class="flex-1 px-8 py-6">
+      <div>
+        <h1 class="text-xl font-semibold">Welcome to Together.NET</h1>
+        <small class="text-gray-400">Đăng nhập để truy cập tài khoản của bạn</small>
+      </div>
+
+      <form nz-form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="mt-8">
+        <nz-form-item>
+          <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
+            <nz-input-group nzPrefixIcon="mail" nzSize="large" class="rounded-md">
+              <input
+                type="email"
+                nz-input
+                formControlName="email"
+                placeholder="enter your email"
+              />
+            </nz-input-group>
+            <ng-template #emailErrorTpl let-control>
+              @if (control.errors?.['required']) { Vui lòng nhập địa chỉ email }
+              @if (control.errors?.['pattern']) { Email không đúng định dạng }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
+            <nz-input-group [nzSuffix]="showPasswordTpl" nzPrefixIcon="lock" nzSize="large" class="rounded-md">
+              <input
+                [type]="passwordVisible ? 'text' : 'password'"
+                nz-input
+                formControlName="password"
+                placeholder="enter your password"
+              />
+              <ng-template #showPasswordTpl>
+                <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'" (click)="passwordVisible = !passwordVisible"></span>
+              </ng-template>
+            </nz-input-group>
+            <ng-template #passwordErrorTpl let-control>
+              @if (control.errors?.['required']) { Vui lòng nhập mật khẩu }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <label nz-checkbox><span>Ghi nhớ đăng nhập</span></label>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <a routerLink="/auth/forgot-password" class="float-right font-semibold text-primary">Quên mật khẩu?</a>
+          </div>
+        </div>
+        <button nz-button nzType="primary" nzBlock nzSize="large" class="rounded-md mt-4" [nzLoading]="loading$ | async">
+          Đăng nhập
+        </button>
+      </form>
+
+      <button nz-button nzBlock nzSize="large" class="flex justify-center items-center rounded-md mt-2" [disabled]="loading$ | async">
+        <img class="w-5 mr-2" ngSrc="shared/assets/images/icon-google.png" alt="" height="512" width="512"/>
+        Tiếp tục với Google
+      </button>
+
+      <div class="text-center mt-4">
+        <span class="text-xs text-gray-400 font-semibold">Chưa có tài khoản?</span>
+        <a routerLink="/auth/sign-up" class="text-xs font-semibold text-primary"> Tạo tài khoản mới</a>
+      </div>
+    </div>
+
+    <!-- Wrapper right -->
+    <div class="flex-1">
+      <img
+        class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
+        ngSrc="shared/assets/images/login-banner.jpeg"
+        alt="cat"
+        height="848" width="636"/>
+    </div>
+  </div>
+</div>

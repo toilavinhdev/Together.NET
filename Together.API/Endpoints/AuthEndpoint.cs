@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Together.API.Extensions;
 using Together.Application.Features.FeatureUser.Commands;
+using Together.Application.Features.FeatureUser.Exceptions;
 using Together.Application.Features.FeatureUser.Queries;
 using Together.Application.Features.FeatureUser.Responses;
 using Together.Shared.ValueObjects;
@@ -16,8 +17,8 @@ public class AuthEndpoint : IEndpoint
         group.MapPost("/sign-in", SignIn);
         group.MapPost("/sign-up", SignUp);
         group.MapPost("/forgot-password", ForgotPassword);
-        group.MapPost("/forgot-password/{userId:guid}/{token}", VerifyForgotPassword);
-        group.MapPut("/new-password", NewPassword).RequireAuthorization();
+        group.MapGet("/forgot-password/{userId:guid}/{token}", VerifyForgotPassword);
+        group.MapPut("/new-password", NewPassword);
     }
 
     private static Task<Result<SignInResponse>> SignIn(ISender sender, SignInCommand command) => sender.Send(command);
@@ -28,8 +29,8 @@ public class AuthEndpoint : IEndpoint
     
     private static Task<Result> ForgotPassword(ISender sender, ForgotPasswordCommand command) => sender.Send(command);
     
-    private static Task<Result<VerifyForgotPasswordResponse>> VerifyForgotPassword(ISender sender, Guid userId, string token) 
-        => sender.Send(new VerifyForgotPasswordCommand(userId, token));
+    private static Task<Result> VerifyForgotPassword(ISender sender, Guid userId, string token) 
+        => sender.Send(new VerifyForgotPasswordQuery(userId, token));
     
     private static Task<Result> NewPassword(ISender sender, NewPasswordCommand command) => sender.Send(command);
 }
