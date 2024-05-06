@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "styles/index";
+
+:root {
+  --primary: #4338CA;
+}
+
+* {
+  font-family: 'Lexend Deca', Helvetica, sans-serif;
+}
+
+.together-container {
+  width: 680px;
+  margin: 0 auto;
+}

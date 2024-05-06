@@ -1,0 +1,13 @@
+/* Tùy chỉnh kiểu dáng của thanh cuộn */
+*::-webkit-scrollbar {
+  width: 4px; /* Độ rộng của thanh cuộn */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--primary); /* Màu của thanh cuộn */
+  border-radius: 4px; /* Bo góc của thanh cuộn */
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Màu nền của thanh cuộn */
+}
