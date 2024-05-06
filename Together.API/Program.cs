@@ -1,44 +1,45 @@
-var builder = WebApplication.CreateBuilder(args);
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Together.API;
+using Together.API.Extensions;
+using Together.Application;
+using Together.Application.Behaviors;
+using Together.Persistence;
+using Together.Shared.ValueObjects;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var builder = WebApplication.CreateBuilder(args);
+builder.SetupEnvironment<AppSettings>(nameof(AppSettings), out var appSettings);
+
+var services = builder.Services;
+services.AddSingleton(appSettings);
+services.AddCustomCors(Metadata.Name);
+services.AddHttpContextAccessor();
+services.AddJwtBearerAuth(appSettings.JwtTokenConfig);
+services.AddAuthorization();
+services.AddEndpointDefinitions(Metadata.Assembly);
+services.AddSwaggerDocument(Metadata.Name, "v1");
+services.AddMediatR(c =>
+{
+    c.RegisterServicesFromAssembly(ApplicationAssembly.Assembly);
+    c.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    c.AddOpenBehavior(typeof(PerformanceBehavior<,>));
+});
+services.AddValidatorsFromAssembly(ApplicationAssembly.Assembly);
+services.AddAutoMapper(ApplicationAssembly.Assembly);
+services.AddDbContext<TogetherContext>(o =>
+{
+    o.UseSqlServer(appSettings.SqlServerConfig.ConnectionString);
+});
+services.AddServiceCollections();
 
 var app = builder.Build();
+app.UseDefaultExceptionHandler();
+app.UseCors(Metadata.Name);
+app.UseStaticFilesConfigure(appSettings.StaticFileConfig);
+app.UseSwaggerDocument(Metadata.Name);
+app.MapEndpointDefinitions(app.MapGroup("/api"));
+app.UseWebSockets();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
-
+app.Map("/", () => Metadata.Name);
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
