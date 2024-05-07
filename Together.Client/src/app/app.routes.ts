@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '~core/guards';
+import { authGuard, loggedGuard } from '~core/guards';
 
 export const routes: Routes = [
   {
@@ -16,5 +16,6 @@ export const routes: Routes = [
       import('~features/feature-auth/feature-auth.routes').then(
         (r) => r.routes,
       ),
+    canActivate: [loggedGuard],
   },
 ];

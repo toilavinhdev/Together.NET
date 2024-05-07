@@ -6,6 +6,7 @@ import {
   newPassword,
   newPasswordFailed,
   newPasswordSuccess,
+  sessionInitialization,
   signIn,
   signInFailed,
   signInSuccess,
@@ -16,17 +17,21 @@ import {
   verifyForgotPasswordTokenFailed,
   verifyForgotPasswordTokenSuccess,
 } from '~features/feature-auth/store/auth.actions';
+import { IUserClaimsPrincipal } from '~features/feature-auth/store/auth.models';
 
 export interface AuthState {
   loading: boolean;
+  claims: IUserClaimsPrincipal | null;
 }
 
 const initialState: AuthState = {
   loading: false,
+  claims: null,
 };
 
 export const authReducer = createReducer(
   initialState,
+  on(sessionInitialization, (state, { claims }) => ({ ...state, claims })),
   on(signIn, (state) => ({ ...state, loading: true })),
   on(signInSuccess, (state) => ({ ...state, loading: false })),
   on(signInFailed, (state) => ({ ...state, loading: false })),

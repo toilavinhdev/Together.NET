@@ -5,9 +5,11 @@ import {
   ISignInRequest,
   ISignInResponse,
   ISignUpRequest,
+  IUserClaimsPrincipal,
   IVerifyForgotPasswordRequest,
 } from '~features/feature-auth/store/auth.models';
 
+const SESSION_INITIALIZATION = '[Auth] Session Initialization';
 const SIGN_IN = '[Auth] Sign In';
 const SIGN_IN_SUCCESS = '[Auth] Sign In Success';
 const SIGN_IN_FAILED = '[Auth] Sign In Failed';
@@ -25,6 +27,11 @@ const VERIFY_FORGOT_PASSWORD_TOKEN_FAILED =
 const NEW_PASSWORD = '[Auth] New Password';
 const NEW_PASSWORD_SUCCESS = '[Auth] New Password Success';
 const NEW_PASSWORD_FAILED = '[Auth] New Password Failed';
+
+export const sessionInitialization = createAction(
+  SESSION_INITIALIZATION,
+  props<{ claims: IUserClaimsPrincipal | null }>(),
+);
 
 export const signIn = createAction(
   SIGN_IN,

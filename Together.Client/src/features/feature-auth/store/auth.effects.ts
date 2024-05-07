@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import {
+  Actions,
+  createEffect,
+  ofType,
+  ROOT_EFFECTS_INIT,
+} from '@ngrx/effects';
 import { AuthService } from '~features/feature-auth/store/auth.service';
 import {
   forgotPassword,
@@ -8,6 +13,7 @@ import {
   newPassword,
   newPasswordFailed,
   newPasswordSuccess,
+  sessionInitialization,
   signIn,
   signInFailed,
   signInSuccess,
@@ -32,6 +38,19 @@ export class AuthEffects {
     private commonService: CommonService,
   ) {}
 
+  init$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      switchMap(() => {
+        return of(
+          sessionInitialization({
+            claims: this.authService.getUserClaimsPrincipal(),
+          }),
+        );
+      }),
+    ),
+  );
+
   signIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(signIn),
@@ -55,6 +74,11 @@ export class AuthEffects {
           this.notificationService.success('Đăng nhập thành công', '');
           this.commonService.redirectToMain();
         }),
+        map(() =>
+          sessionInitialization({
+            claims: this.authService.getUserClaimsPrincipal(),
+          }),
+        ),
       ),
     {
       dispatch: false,
