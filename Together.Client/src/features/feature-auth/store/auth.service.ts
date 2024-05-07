@@ -58,6 +58,10 @@ export class AuthService extends BaseService {
     return this.client.put<IResult>(url, payload, {});
   }
 
+  decodeToken(accessToken: string): IUserClaimsPrincipal | null {
+    return jwtDecode<IUserClaimsPrincipal>(accessToken);
+  }
+
   getUserClaimsPrincipal(): IUserClaimsPrincipal | null {
     const claims = localStorage.getItem(USER_DATA);
     if (!claims) return null;
@@ -72,7 +76,7 @@ export class AuthService extends BaseService {
     localStorage.setItem(ACCESS_TOKEN, accessToken);
     localStorage.setItem(
       USER_DATA,
-      JSON.stringify(jwtDecode<IUserClaimsPrincipal>(accessToken)),
+      JSON.stringify(this.decodeToken(accessToken)),
     );
   }
 }

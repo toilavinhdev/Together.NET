@@ -56,7 +56,12 @@ export class AuthEffects {
       ofType(signIn),
       switchMap(({ payload }) =>
         this.authService.signIn(payload).pipe(
-          map((res) => signInSuccess({ response: res })),
+          switchMap((response) => [
+            signInSuccess({ response: response }),
+            sessionInitialization({
+              claims: this.authService.decodeToken(response.accessToken),
+            }),
+          ]),
           catchError((err: HttpErrorResponse) =>
             of(signInFailed({ errorCode: err.error.errors[0].code })),
           ),
@@ -74,11 +79,6 @@ export class AuthEffects {
           this.notificationService.success('Đăng nhập thành công', '');
           this.commonService.redirectToMain();
         }),
-        map(() =>
-          sessionInitialization({
-            claims: this.authService.getUserClaimsPrincipal(),
-          }),
-        ),
       ),
     {
       dispatch: false,
