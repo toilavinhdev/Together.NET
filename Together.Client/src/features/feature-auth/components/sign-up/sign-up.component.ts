@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgOptimizedImage } from '@angular/common';
 import {
   AbstractControl,
   FormControl,
@@ -50,6 +50,7 @@ import { emailPattern } from '~shared/constants';
     NzRowDirective,
     ReactiveFormsModule,
     RouterLink,
+    JsonPipe,
   ],
   templateUrl: './sign-up.component.html',
   styles: ``,
@@ -57,6 +58,7 @@ import { emailPattern } from '~shared/constants';
 export class SignUpComponent extends BaseComponent {
   signUpForm!: FormGroup<{
     fullName: FormControl<string>;
+    username: FormControl<string>;
     email: FormControl<string>;
     password: FormControl<string>;
     confirmPassword: FormControl<string>;
@@ -87,7 +89,8 @@ export class SignUpComponent extends BaseComponent {
   ) {
     super();
     this.signUpForm = this.formBuilder.group({
-      fullName: ['', [Validators.required]],
+      fullName: ['', [Validators.required, Validators.maxLength(128)]],
+      username: ['', [Validators.required, Validators.maxLength(32)]],
       email: ['', [Validators.required, Validators.pattern(emailPattern)]],
       password: ['', [Validators.required]],
       confirmPassword: [

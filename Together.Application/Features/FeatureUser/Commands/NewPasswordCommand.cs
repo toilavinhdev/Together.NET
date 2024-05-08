@@ -5,7 +5,6 @@ using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
 using Together.Shared.Extensions;
 using Together.Shared.Messaging;
-using Together.Shared.Services;
 using Together.Shared.ValueObjects;
 
 namespace Together.Application.Features.FeatureUser.Commands;
@@ -31,7 +30,7 @@ public class NewPasswordCommand : ICommand
         }
     }
     
-    internal class Handler(TogetherContext context, IBaseService baseService) : ICommandHandler<NewPasswordCommand>
+    internal class Handler(TogetherContext context) : ICommandHandler<NewPasswordCommand>
     {
         public async Task<Result> Handle(NewPasswordCommand request, CancellationToken cancellationToken)
         {

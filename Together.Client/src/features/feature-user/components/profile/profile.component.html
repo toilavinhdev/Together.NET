@@ -1,0 +1,15 @@
+<div>
+  <div class="flex justify-between pt-10">
+    <div>
+      <div class="font-extrabold text-[28px]">{{ profile?.fullName }}</div>
+      <div>&#64;{{ profile?.username }}</div>
+    </div>
+    <together-user-avatar [url]="profile?.avatarUrl" [size]="80"/>
+  </div>
+  <div class="mt-2">
+    @if (profile?.bio) {
+      <span>{{ profile?.bio }}</span>
+    }
+  </div>
+  <together-profile-editor [profile]="profile"/>
+</div>

@@ -1,0 +1,13 @@
+<div class="together-container">
+  @if ((status$ | async) === 'success') {
+    <together-profile [profile]="(profile$ | async)"/>
+  }
+  @if ((status$ | async) === 'failed') {
+    @if ((error$ | async) === 'USER_NOT_FOUND') {
+      <div class="pt-[40px]">
+        <div class="text-center text-[20px] font-extrabold">Người dùng không tồn tại</div>
+        <div class="text-center text-[16px] font-semibold">NOT FOUND 404</div>
+      </div>
+    }
+  }
+</div>

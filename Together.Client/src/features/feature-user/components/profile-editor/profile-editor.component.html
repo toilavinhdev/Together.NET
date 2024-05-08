@@ -1,0 +1,63 @@
+<button
+  nz-button
+  nzBlock
+  nzShape="round"
+  class="mt-4"
+  (click)="showModal()"
+>Cập nhật thông tin</button>
+
+<nz-modal
+  [(nzVisible)]="visible"
+  nzTitle="Cập nhật thông tin"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="profileForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label>Tên đầy đủ</nz-form-label>
+        <nz-form-control [nzErrorTip]="fullNameErrorTpl">
+          <nz-input-group nzPrefixIcon="user">
+            <input
+              type="text"
+              nz-input
+              formControlName="fullName"
+            />
+            <ng-template #fullNameErrorTpl let-control>
+              @if (control.errors?.['required']) { Vui lòng nhập tên của bạn }
+              @if (control.errors?.['maxlength']) { Tên đầy đủ tối đa 128 ký tự }
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>Giới thiệu</nz-form-label>
+        <nz-form-control [nzErrorTip]="bioErrorTpl">
+          <nz-input-group nzPrefixIcon="file-text">
+            <input
+              type="text"
+              nz-input
+              formControlName="bio"
+            />
+          </nz-input-group>
+          <ng-template #bioErrorTpl let-control>
+            @if (control.errors?.['maxlength']) { Giới thiêu tối đa 128 ký tự }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button
+      nz-button
+      nzBlock
+      nzType="primary"
+      nzSize="large"
+      class="rounded-lg"
+      (click)="onSubmit()"
+      [nzLoading]="(status$ | async) === 'loading'"
+    >
+      Cập nhật
+    </button>
+  </ng-container>
+</nz-modal>

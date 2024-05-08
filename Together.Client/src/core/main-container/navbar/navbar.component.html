@@ -1,0 +1,55 @@
+<div class="w-[62px] fixed left-0 h-screen shadow-lg flex flex-col justify-between">
+  <!-- logo -->
+  <div>
+
+  </div>
+  <!-- features -->
+  <div class="flex-col gap-x-3 px-[5px]">
+    <div routerLink="/"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon [name]="getIcon('/', 'home', 'home-filled')"/>
+    </div>
+    <div routerLink="/search"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon [name]="getIcon('/search', 'search', 'search-filled')"/>
+    </div>
+    <div class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon name="create"/>
+    </div>
+    <div routerLink="/notifications"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon [name]="getIcon('/notifications', 'heart', 'heart-filled')"/>
+    </div>
+    <div routerLink="/messenger"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon [name]="getIcon('/messenger', 'message', 'message-filled')"/>
+    </div>
+    <div routerLink="/profile/{{(me$ | async)?.username}}"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+      <together-svg-icon [name]="(me$ | async)?.username === currentUsername ? 'user-filled' : 'user'"/>
+    </div>
+  </div>
+
+  <!-- more -->
+  <div class="flex justify-center px-[5px] mt-auto mb-[20px]">
+    <div
+      nz-dropdown
+      nzTrigger="click"
+      nzPlacement="topLeft"
+      [nzDropdownMenu]="optionsTpl"
+      nzOverlayClassName="left-[60px] top-[55px]"
+      class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 hover:text-primary"
+    >
+      <i class="fa-solid fa-bars text-[22px] text-[#b8b8b8]"></i>
+    </div>
+  </div>
+</div>
+
+<nz-dropdown-menu #optionsTpl="nzDropdownMenu">
+  <ul nz-menu class="w-[210px] rounded-lg">
+    <li nz-menu-item class="px-6 py-3">Cài đặt</li>
+    <li nz-menu-divider></li>
+    <li (click)="onLogout()" nz-menu-item class="px-6 py-3">Đăng xuất</li>
+  </ul>
+</nz-dropdown-menu>
+

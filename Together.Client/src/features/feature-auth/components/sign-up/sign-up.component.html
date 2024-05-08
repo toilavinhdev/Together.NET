@@ -12,7 +12,7 @@
         <!-- full name -->
         <nz-form-item>
           <nz-form-control nzHasFeedback [nzErrorTip]="fullNameErrorTpl">
-            <nz-input-group nzPrefixIcon="user" nzSize="large" class="rounded-md">
+            <nz-input-group nzPrefixIcon="user"  class="rounded-md">
               <input
                 type="text"
                 nz-input
@@ -22,13 +22,31 @@
             </nz-input-group>
             <ng-template #fullNameErrorTpl let-control>
               @if (control.errors?.['required']) { Vui lòng nhập tên của bạn }
+              @if (control.errors?.['maxlength']) { Tên đầy đủ tối đa 128 ký tự }
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- username -->
+        <nz-form-item>
+          <nz-form-control nzHasFeedback [nzErrorTip]="usernameErrorTpl">
+            <nz-input-group nzPrefixIcon="user" class="rounded-md">
+              <input
+                type="text"
+                nz-input
+                formControlName="username"
+                placeholder="enter your username"
+              />
+            </nz-input-group>
+            <ng-template #usernameErrorTpl let-control>
+              @if (control.errors?.['required']) { Vui lòng nhập tên người dùng }
+              @if (control.errors?.['maxlength']) { Tên người dùng tối đa 32 ký tự }
             </ng-template>
           </nz-form-control>
         </nz-form-item>
         <!-- email -->
         <nz-form-item>
           <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
-            <nz-input-group nzPrefixIcon="mail" nzSize="large" class="rounded-md">
+            <nz-input-group nzPrefixIcon="mail" class="rounded-md">
               <input
                 type="email"
                 nz-input
@@ -45,7 +63,7 @@
         <!-- password -->
         <nz-form-item>
           <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
-            <nz-input-group [nzSuffix]="showPasswordTpl" nzPrefixIcon="lock" nzSize="large" class="rounded-md">
+            <nz-input-group [nzSuffix]="showPasswordTpl" nzPrefixIcon="lock" class="rounded-md">
               <input
                 [type]="passwordVisible ? 'text' : 'password'"
                 nz-input
@@ -64,7 +82,7 @@
         <!-- confirm password -->
         <nz-form-item>
           <nz-form-control nzHasFeedback [nzErrorTip]="confirmPasswordErrorTpl">
-            <nz-input-group [nzSuffix]="showConfirmPasswordTpl" nzPrefixIcon="lock" nzSize="large" class="rounded-md">
+            <nz-input-group [nzSuffix]="showConfirmPasswordTpl" nzPrefixIcon="lock" class="rounded-md">
               <input
                 [type]="confirmPasswordVisible ? 'text' : 'password'"
                 nz-input
@@ -81,7 +99,7 @@
             </ng-template>
           </nz-form-control>
         </nz-form-item>
-        <button nz-button nzType="primary" nzBlock nzSize="large" class="rounded-md mt-4" [nzLoading]="loading$ | async">Đăng ký</button>
+        <button nz-button nzType="primary" nzBlock nzSize="large" class="rounded-md" [nzLoading]="loading$ | async">Đăng ký</button>
       </form>
 
       <button nz-button nzBlock nzSize="large" class="flex justify-center items-center rounded-md mt-2" [disabled]="loading$ | async">

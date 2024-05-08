@@ -35,9 +35,9 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'profile',
+        path: 'profile/:username',
         loadChildren: () =>
-          import('~features/feature-profile/feature-profile.routes').then(
+          import('~features/feature-user/feature-user.routes').then(
             (r) => r.routes,
           ),
       },

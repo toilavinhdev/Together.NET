@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Together.API.Extensions;
 using Together.Application.Features.FeatureUser.Commands;
-using Together.Application.Features.FeatureUser.Exceptions;
 using Together.Application.Features.FeatureUser.Queries;
 using Together.Application.Features.FeatureUser.Responses;
 using Together.Shared.ValueObjects;

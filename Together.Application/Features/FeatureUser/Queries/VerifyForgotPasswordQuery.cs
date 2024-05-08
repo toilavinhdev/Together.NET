@@ -1,14 +1,13 @@
-﻿using System.Security.Claims;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Together.Application.Features.FeatureUser.Exceptions;
 using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
 using Together.Shared.Extensions;
-using Together.Shared.Helpers;
 using Together.Shared.Messaging;
 using Together.Shared.ValueObjects;
 
-namespace Together.Application.Features.FeatureUser.Exceptions;
+namespace Together.Application.Features.FeatureUser.Queries;
 
 public class VerifyForgotPasswordQuery(Guid userId, string token) : IQuery
 {
@@ -25,12 +24,11 @@ public class VerifyForgotPasswordQuery(Guid userId, string token) : IQuery
         }
     }
     
-    internal class Handler(TogetherContext context, AppSettings appSettings) : IQueryHandler<VerifyForgotPasswordQuery>
+    internal class Handler(TogetherContext context) : IQueryHandler<VerifyForgotPasswordQuery>
     {
         public async Task<Result> Handle(VerifyForgotPasswordQuery request, CancellationToken cancellationToken)
         {
             var userToken = await context.UserTokens
-                .Include(x => x.User)
                 .FirstOrDefaultAsync(x => 
                         x.UserId == request.UserId && 
                         x.Type == UserTokenType.ForgotPasswordToken && 

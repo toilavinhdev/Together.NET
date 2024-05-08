@@ -1,0 +1,6 @@
+<div>
+  <together-navbar />
+  <div *ngIf="me$ | async" class="ml-[62px]">
+    <router-outlet />
+  </div>
+</div>

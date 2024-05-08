@@ -21,14 +21,20 @@ import {
   authReducer,
   featureAuthKey,
 } from '~features/feature-auth/store';
+import {
+  featureUserKey,
+  UserEffects,
+  userReducer,
+} from '~features/feature-user/store';
 
 registerLocaleData(en);
 
 const stores = {
   [featureAuthKey]: authReducer,
+  [featureUserKey]: userReducer,
 };
 
-const effects = [AuthEffects];
+const effects = [AuthEffects, UserEffects];
 
 export const appConfig: ApplicationConfig = {
   providers: [

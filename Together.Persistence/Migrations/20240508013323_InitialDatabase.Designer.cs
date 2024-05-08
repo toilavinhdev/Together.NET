@@ -12,7 +12,7 @@ using Together.Persistence;
 namespace Together.Persistence.Migrations
 {
     [DbContext(typeof(TogetherContext))]
-    [Migration("20240506035520_InitialDatabase")]
+    [Migration("20240508013323_InitialDatabase")]
     partial class InitialDatabase
     {
         /// <inheritdoc />
@@ -112,16 +112,64 @@ namespace Together.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Username")
-                        .IsUnique()
-                        .HasFilter("[Username] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.UserToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTokens");
+                });
+
+            modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.UserToken", b =>
+                {
+                    b.HasOne("Together.Domain.Aggregates.UserAggregate.User", "User")
+                        .WithMany("UserToken")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.User", b =>
+                {
+                    b.Navigation("UserToken");
                 });
 #pragma warning restore 612, 618
         }

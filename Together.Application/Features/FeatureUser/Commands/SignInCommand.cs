@@ -41,6 +41,7 @@ public class SignInCommand : ICommand<SignInResponse>
                 {
                     new ("id", user.Id.ToString()),
                     new ("fullName", user.FullName),
+                    new ("username", user.Username),
                     new ("email", user.Email),
                 },
                 DateTime.Now.AddMinutes(appSettings.JwtTokenConfig.AccessTokenDurationInMinutes).ToLocalTime(),

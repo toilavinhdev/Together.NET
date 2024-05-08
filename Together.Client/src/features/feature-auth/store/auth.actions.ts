@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import {
   IForgotPasswordRequest,
+  IGetMeResponse,
   INewPasswordRequest,
   ISignInRequest,
   ISignInResponse,
@@ -10,9 +11,15 @@ import {
 } from '~features/feature-auth/store/auth.models';
 
 const SESSION_INITIALIZATION = '[Auth] Session Initialization';
+const ME = '[Auth] Me';
+const ME_SUCCESS = '[Auth] Me Success';
+const ME_FAILED = '[Auth] Me Failed';
 const SIGN_IN = '[Auth] Sign In';
 const SIGN_IN_SUCCESS = '[Auth] Sign In Success';
 const SIGN_IN_FAILED = '[Auth] Sign In Failed';
+const LOG_OUT = '[Auth] Logout';
+const LOG_OUT_SUCCESS = '[Auth] Logout Success';
+const LOG_OUT_FAILED = '[Auth] Logout Failed';
 const SIGN_UP = '[Auth] Sign Up';
 const SIGN_UP_SUCCESS = '[Auth] Sign Up Success';
 const SIGN_UP_FAILED = '[Auth] Sign Up Failed';
@@ -27,6 +34,15 @@ const VERIFY_FORGOT_PASSWORD_TOKEN_FAILED =
 const NEW_PASSWORD = '[Auth] New Password';
 const NEW_PASSWORD_SUCCESS = '[Auth] New Password Success';
 const NEW_PASSWORD_FAILED = '[Auth] New Password Failed';
+
+export const me = createAction(ME);
+
+export const meSuccess = createAction(
+  ME_SUCCESS,
+  props<{ response: IGetMeResponse }>(),
+);
+
+export const meFailed = createAction(ME_FAILED);
 
 export const sessionInitialization = createAction(
   SESSION_INITIALIZATION,
@@ -47,6 +63,12 @@ export const signInFailed = createAction(
   SIGN_IN_FAILED,
   props<{ errorCode: string }>(),
 );
+
+export const logout = createAction(LOG_OUT);
+
+export const logoutSuccess = createAction(LOG_OUT_SUCCESS);
+
+export const logoutFailed = createAction(LOG_OUT_FAILED);
 
 export const signUp = createAction(
   SIGN_UP,

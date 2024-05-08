@@ -10,6 +10,12 @@ import {
   forgotPassword,
   forgotPasswordFailed,
   forgotPasswordSuccess,
+  logout,
+  logoutFailed,
+  logoutSuccess,
+  me,
+  meFailed,
+  meSuccess,
   newPassword,
   newPasswordFailed,
   newPasswordSuccess,
@@ -27,7 +33,7 @@ import {
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonService } from '~shared/services';
+import { CommonService, LoadingService } from '~shared/services';
 
 @Injectable()
 export class AuthEffects {
@@ -36,6 +42,7 @@ export class AuthEffects {
     private authService: AuthService,
     private notificationService: NzNotificationService,
     private commonService: CommonService,
+    private loadingService: LoadingService,
   ) {}
 
   init$ = createEffect(() =>
@@ -47,6 +54,24 @@ export class AuthEffects {
             claims: this.authService.getUserClaimsPrincipal(),
           }),
         );
+      }),
+    ),
+  );
+
+  me$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(me),
+      tap(() => {
+        this.loadingService.showGlobalLoading();
+      }),
+      switchMap(() =>
+        this.authService.me().pipe(
+          map((response) => meSuccess({ response })),
+          catchError(() => of(meFailed)),
+        ),
+      ),
+      tap(() => {
+        this.loadingService.hideGlobalLoading();
       }),
     ),
   );
@@ -107,6 +132,40 @@ export class AuthEffects {
     },
   );
 
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(logout),
+      tap(() => {
+        this.loadingService.showGlobalLoading();
+      }),
+      switchMap(() =>
+        this.authService.logout().pipe(
+          map(() => logoutSuccess()),
+          catchError(() => of(logoutFailed())),
+        ),
+      ),
+      tap(() => {
+        this.loadingService.hideGlobalLoading();
+        this.notificationService.info('Bạn đã đăng xuất', '');
+      }),
+    ),
+  );
+
+  logoutSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logoutSuccess),
+        tap(() => {
+          this.commonService.redirectToLogin();
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  logoutFailed$ = createEffect(() => this.actions$.pipe(ofType(logoutFailed)), {
+    dispatch: false,
+  });
+
   signUp$ = createEffect(() =>
     this.actions$.pipe(
       ofType(signUp),
@@ -138,13 +197,15 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(signUpFailed),
         tap(({ errorCode }) => {
-          console.log(111, errorCode);
           switch (errorCode) {
-            case 'USERNAME_ALREADY_EXISTS':
+            case 'DUPLICATE_USERNAME':
               this.notificationService.error(
                 'Tên người dùng đã được sử dụng',
                 '',
               );
+              break;
+            case 'DUPLICATE_EMAIL':
+              this.notificationService.error('Email đã được sử dụng', '');
               break;
             default:
               this.notificationService.error('Có lỗi xảy ra khi đăng ký', '');

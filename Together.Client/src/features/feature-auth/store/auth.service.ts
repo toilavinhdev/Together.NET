@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from '~core/abstractions';
 import {
   IForgotPasswordRequest,
+  IGetMeResponse,
   INewPasswordRequest,
   ISignInRequest,
   ISignInResponse,
@@ -10,7 +11,7 @@ import {
   IUserClaimsPrincipal,
   IVerifyForgotPasswordRequest,
 } from '~features/feature-auth/store/auth.models';
-import { map, Observable } from 'rxjs';
+import { delay, map, Observable, of, tap } from 'rxjs';
 import { IResult } from '~core/models';
 import { jwtDecode } from 'jwt-decode';
 import {
@@ -27,6 +28,13 @@ export class AuthService extends BaseService {
     this.setEndpoint('/auth');
   }
 
+  me(): Observable<IGetMeResponse> {
+    const url = this.createUrl('/me');
+    return this.client
+      .get<IResult<IGetMeResponse>>(url)
+      .pipe(map((res) => res.data));
+  }
+
   signIn(payload: ISignInRequest): Observable<ISignInResponse> {
     const url = this.createUrl('/sign-in');
     return this.client
@@ -37,6 +45,15 @@ export class AuthService extends BaseService {
   signUp(payload: ISignUpRequest): Observable<IResult> {
     const url = this.createUrl('/sign-up');
     return this.client.post<IResult>(url, payload);
+  }
+
+  logout(): Observable<any> {
+    return of([]).pipe(
+      delay(2500),
+      tap(() => {
+        this.removeToken();
+      }),
+    );
   }
 
   forgotPassword(payload: IForgotPasswordRequest): Observable<IResult> {
@@ -78,5 +95,10 @@ export class AuthService extends BaseService {
       USER_DATA,
       JSON.stringify(this.decodeToken(accessToken)),
     );
+  }
+
+  removeToken() {
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(USER_DATA);
   }
 }

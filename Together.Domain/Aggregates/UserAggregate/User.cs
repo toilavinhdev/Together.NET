@@ -11,8 +11,8 @@ public class User : TimeTrackingEntity, IAggregateRoot
     [MaxLength(128)]
     public string FullName { get; set; } = default!;
 
-    [MaxLength(32)]
-    public string? Username { get; set; }
+    [MaxLength(32)] 
+    public string Username { get; set; } = default!;
 
     public string Email { get; set; } = default!;
     
