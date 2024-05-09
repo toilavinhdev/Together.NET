@@ -29,7 +29,7 @@ import {
 } from '~features/feature-auth/store';
 import { Store } from '@ngrx/store';
 import { BaseComponent } from '~core/abstractions';
-import { emailPattern } from '~shared/constants';
+import { emailPattern, usernamePattern } from '~shared/constants';
 
 @Component({
   selector: 'together-sign-up',
@@ -90,7 +90,14 @@ export class SignUpComponent extends BaseComponent {
     super();
     this.signUpForm = this.formBuilder.group({
       fullName: ['', [Validators.required, Validators.maxLength(128)]],
-      username: ['', [Validators.required, Validators.maxLength(32)]],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(32),
+          Validators.pattern(usernamePattern),
+        ],
+      ],
       email: ['', [Validators.required, Validators.pattern(emailPattern)]],
       password: ['', [Validators.required]],
       confirmPassword: [

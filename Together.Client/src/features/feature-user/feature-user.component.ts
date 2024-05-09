@@ -5,7 +5,9 @@ import { BaseComponent } from '~core/abstractions';
 import { combineLatest, filter, map, Observable, takeUntil } from 'rxjs';
 import {
   getProfile,
+  IGetMeResponse,
   IGetProfileResponse,
+  userMeSelector,
   userProfileDataSelector,
   userProfileErrorSelector,
   userProfileStatusSelector,
@@ -13,7 +15,6 @@ import {
 import { ProfileComponent } from '~features/feature-user/components/profile/profile.component';
 import { StatusType } from '~core/types';
 import { AsyncPipe } from '@angular/common';
-import { authMeSelector, IGetMeResponse } from '~features/feature-auth/store';
 
 @Component({
   selector: 'together-feature-user',
@@ -25,7 +26,7 @@ import { authMeSelector, IGetMeResponse } from '~features/feature-auth/store';
 export class FeatureUserComponent extends BaseComponent implements OnInit {
   username = '';
   me$: Observable<IGetMeResponse | null> = this.store
-    .select(authMeSelector)
+    .select(userMeSelector)
     .pipe(takeUntil(this.destroy$));
   profile$: Observable<IGetProfileResponse | null> = this.store
     .select(userProfileDataSelector)

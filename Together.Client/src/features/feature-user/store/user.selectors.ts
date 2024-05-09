@@ -6,27 +6,37 @@ export const featureUserKey = 'featureUser';
 export const featureUserSelector =
   createFeatureSelector<UserState>(featureUserKey);
 
+export const userMeSelector = createSelector(
+  featureUserSelector,
+  (state) => state.me,
+);
+
+export const userViewMeSelector = createSelector(
+  featureUserSelector,
+  (state) => state.viewMe,
+);
+
 export const userProfileDataSelector = createSelector(
   featureUserSelector,
-  (state) => state.profile.data,
+  (state) => state.profile,
 );
 
 export const userProfileStatusSelector = createSelector(
   featureUserSelector,
-  (state) => state.profile.status,
+  (state) => state.profileStatus,
 );
 
 export const userProfileErrorSelector = createSelector(
   featureUserSelector,
-  (state) => state.profile.error,
+  (state) => state.profileError,
 );
 
 export const userUpdateProfileStatusSelector = createSelector(
   featureUserSelector,
-  (state) => state.updateProfile.status,
+  (state) => state.updateProfileStatus,
 );
 
 export const userUpdateProfileErrorSelector = createSelector(
   featureUserSelector,
-  (state) => state.updateProfile.error,
+  (state) => state.updateProfileError,
 );

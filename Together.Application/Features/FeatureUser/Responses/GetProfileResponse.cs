@@ -17,4 +17,10 @@ public class GetProfileResponse
     public Gender? Gender { get; set; }
     
     public string? AvatarUrl { get; set; }
+    
+    public bool IsFollowing { get; set; }
+    
+    public long TotalFollower { get; set; }
+    
+    public long TotalFollowing { get; set; }
 }

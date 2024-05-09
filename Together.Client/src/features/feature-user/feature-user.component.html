@@ -1,6 +1,9 @@
 <div class="together-container">
   @if ((status$ | async) === 'success') {
-    <together-profile [profile]="(profile$ | async)"/>
+    <together-profile
+      [profile]="profile$ | async"
+      [isMe]="(isMe$ | async)!"
+    />
   }
   @if ((status$ | async) === 'failed') {
     @if ((error$ | async) === 'USER_NOT_FOUND') {

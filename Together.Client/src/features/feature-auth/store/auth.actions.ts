@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import {
   IForgotPasswordRequest,
-  IGetMeResponse,
   INewPasswordRequest,
   ISignInRequest,
   ISignInResponse,
@@ -11,9 +10,6 @@ import {
 } from '~features/feature-auth/store/auth.models';
 
 const SESSION_INITIALIZATION = '[Auth] Session Initialization';
-const ME = '[Auth] Me';
-const ME_SUCCESS = '[Auth] Me Success';
-const ME_FAILED = '[Auth] Me Failed';
 const SIGN_IN = '[Auth] Sign In';
 const SIGN_IN_SUCCESS = '[Auth] Sign In Success';
 const SIGN_IN_FAILED = '[Auth] Sign In Failed';
@@ -34,15 +30,6 @@ const VERIFY_FORGOT_PASSWORD_TOKEN_FAILED =
 const NEW_PASSWORD = '[Auth] New Password';
 const NEW_PASSWORD_SUCCESS = '[Auth] New Password Success';
 const NEW_PASSWORD_FAILED = '[Auth] New Password Failed';
-
-export const me = createAction(ME);
-
-export const meSuccess = createAction(
-  ME_SUCCESS,
-  props<{ response: IGetMeResponse }>(),
-);
-
-export const meFailed = createAction(ME_FAILED);
 
 export const sessionInitialization = createAction(
   SESSION_INITIALIZATION,

@@ -5,14 +5,6 @@ export interface IUserClaimsPrincipal {
   email: string;
 }
 
-export interface IGetMeResponse {
-  id: string;
-  fullName: string;
-  email: string;
-  username?: string;
-  avatarUrl?: string;
-}
-
 export interface ISignInRequest {
   email: string;
   password: string;

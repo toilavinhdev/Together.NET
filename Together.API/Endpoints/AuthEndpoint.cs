@@ -12,7 +12,6 @@ public class AuthEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/auth").WithTags("Auth");
-        group.MapGet("/me", Me).RequireAuthorization();
         group.MapPost("/sign-in", SignIn);
         group.MapPost("/sign-up", SignUp);
         group.MapPost("/forgot-password", ForgotPassword);
@@ -23,8 +22,6 @@ public class AuthEndpoint : IEndpoint
     private static Task<Result<SignInResponse>> SignIn(ISender sender, SignInCommand command) => sender.Send(command);
     
     private static Task<Result> SignUp(ISender sender, SignUpCommand command) => sender.Send(command);
-    
-    private static Task<Result<GetMeResponse>> Me(ISender sender) => sender.Send(new GetMeQuery());
     
     private static Task<Result> ForgotPassword(ISender sender, ForgotPasswordCommand command) => sender.Send(command);
     

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Together.Domain.Abstractions;
+using Together.Domain.Aggregates.FollowAggregate;
 using Together.Shared.Enums;
 
 namespace Together.Domain.Aggregates.UserAggregate;
@@ -30,4 +32,10 @@ public class User : TimeTrackingEntity, IAggregateRoot
     public string PasswordHash { get; set; } = default!;
 
     public List<UserToken>? UserToken { get; set; }
+    
+    [InverseProperty(nameof(Follow.Target))]
+    public List<Follow>? Followers { get; set; }
+    
+    [InverseProperty(nameof(Follow.Source))]
+    public List<Follow>? Followings { get; set; }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Together.Application.Features.FeatureUser.Exceptions;
 using Together.Application.Features.FeatureUser.Responses;
 using Together.Persistence;
+using Together.Shared.Constants;
 using Together.Shared.Messaging;
 using Together.Shared.Services;
 using Together.Shared.ValueObjects;
@@ -17,7 +18,10 @@ public class GetProfileQuery(string username) : IQuery<GetProfileResponse>
     {
         public Validator()
         {
-            RuleFor(x => x.Username).NotEmpty();
+            RuleFor(x => x.Username)
+                .NotEmpty()
+                .MaximumLength(32)
+                .Matches(RegexPatterns.UsernameRegex);
         }
     }
     
@@ -30,6 +34,14 @@ public class GetProfileQuery(string username) : IQuery<GetProfileResponse>
             var user = await context.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
             if (user is null) throw new UserNotFoundException(request.Username);
 
+            var isFollowing = await context.Follows.AnyAsync(x => 
+                x.SourceId == currentUserId && 
+                x.TargetId == user.Id, 
+                cancellationToken);
+
+            var totalFollower = await context.Follows.LongCountAsync(x => x.TargetId == user.Id, cancellationToken);
+            var totalFollowing = await context.Follows.LongCountAsync(x => x.SourceId == user.Id, cancellationToken);
+
             var profile = new GetProfileResponse
             {
                 Id = user.Id,
@@ -37,7 +49,10 @@ public class GetProfileQuery(string username) : IQuery<GetProfileResponse>
                 FullName = user.FullName,
                 AvatarUrl = user.AvatarUrl,
                 Bio = user.Bio,
-                Dob = user.Dob
+                Dob = user.Dob,
+                IsFollowing = isFollowing,
+                TotalFollower = totalFollower,
+                TotalFollowing = totalFollowing,
             };
 
             return new Result<GetProfileResponse>().IsSuccess(profile);

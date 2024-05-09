@@ -26,11 +26,21 @@ public class SignUpCommand : ICommand
     {
         public Validator()
         {
-            RuleFor(x => x.FullName).NotEmpty().MaximumLength(128);
-            RuleFor(x => x.Username).NotEmpty().MaximumLength(32);
-            RuleFor(x => x.Email).NotEmpty().Matches(RegexPatterns.EmailRegex);
-            RuleFor(x => x.Password).NotEmpty();
-            RuleFor(x => x.ConfirmPassword).NotEmpty().Matches(x => x.Password);
+            RuleFor(x => x.FullName)
+                .NotEmpty()
+                .MaximumLength(128);
+            RuleFor(x => x.Username)
+                .NotEmpty()
+                .MaximumLength(32)
+                .Matches(RegexPatterns.UsernameRegex);
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .Matches(RegexPatterns.EmailRegex);
+            RuleFor(x => x.Password)
+                .NotEmpty();
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty()
+                .Matches(x => x.Password);
         }
     }
     

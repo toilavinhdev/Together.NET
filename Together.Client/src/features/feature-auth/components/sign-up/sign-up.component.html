@@ -29,7 +29,7 @@
         <!-- username -->
         <nz-form-item>
           <nz-form-control nzHasFeedback [nzErrorTip]="usernameErrorTpl">
-            <nz-input-group nzPrefixIcon="user" class="rounded-md">
+            <nz-input-group [nzPrefix]="cuffTpl" class="rounded-md">
               <input
                 type="text"
                 nz-input
@@ -40,7 +40,9 @@
             <ng-template #usernameErrorTpl let-control>
               @if (control.errors?.['required']) { Vui lòng nhập tên người dùng }
               @if (control.errors?.['maxlength']) { Tên người dùng tối đa 32 ký tự }
+              @if (control.errors?.['pattern']) { Tên người dùng chỉ chứa kí tự a-z 0-9 và _ }
             </ng-template>
+            <ng-template #cuffTpl>&#64;</ng-template>
           </nz-form-control>
         </nz-form-item>
         <!-- email -->

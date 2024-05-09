@@ -67,6 +67,33 @@ namespace Together.Persistence.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("Together.Domain.Aggregates.FollowAggregate.Follow", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TargetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourceId");
+
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("Follows");
+                });
+
             modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -153,6 +180,25 @@ namespace Together.Persistence.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("Together.Domain.Aggregates.FollowAggregate.Follow", b =>
+                {
+                    b.HasOne("Together.Domain.Aggregates.UserAggregate.User", "Source")
+                        .WithMany("Followings")
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Together.Domain.Aggregates.UserAggregate.User", "Target")
+                        .WithMany("Followers")
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Source");
+
+                    b.Navigation("Target");
+                });
+
             modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.UserToken", b =>
                 {
                     b.HasOne("Together.Domain.Aggregates.UserAggregate.User", "User")
@@ -166,6 +212,10 @@ namespace Together.Persistence.Migrations
 
             modelBuilder.Entity("Together.Domain.Aggregates.UserAggregate.User", b =>
                 {
+                    b.Navigation("Followers");
+
+                    b.Navigation("Followings");
+
                     b.Navigation("UserToken");
                 });
 #pragma warning restore 612, 618

@@ -16,7 +16,7 @@ export class BaseService {
   }
 
   protected createUrl(path: string): string {
-    if (!path.startsWith('/')) path = '/' + path;
+    if (!path.startsWith('/') && path !== '') path = '/' + path;
     return `${this.endpoint}${path}`;
   }
 

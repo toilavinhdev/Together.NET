@@ -20,8 +20,3 @@ export const authLoadingSelector = createSelector(
   featureAuthSelector,
   (state) => state.loading,
 );
-
-export const authMeSelector = createSelector(
-  featureAuthSelector,
-  (state) => state.me,
-);

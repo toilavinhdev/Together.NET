@@ -11,13 +11,10 @@ import {
   NzMenuItemComponent,
 } from 'ng-zorro-antd/menu';
 import { Store } from '@ngrx/store';
-import {
-  authMeSelector,
-  IGetMeResponse,
-  logout,
-} from '~features/feature-auth/store';
+import { logout } from '~features/feature-auth/store';
 import { filter, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { IGetMeResponse, userMeSelector } from '~features/feature-user/store';
 
 @Component({
   selector: 'together-navbar',
@@ -36,7 +33,7 @@ import { AsyncPipe } from '@angular/common';
   styles: ``,
 })
 export class NavbarComponent implements OnInit {
-  me$: Observable<IGetMeResponse | null> = this.store.select(authMeSelector);
+  me$: Observable<IGetMeResponse | null> = this.store.select(userMeSelector);
   currentPath = '';
   currentUsername = '';
 

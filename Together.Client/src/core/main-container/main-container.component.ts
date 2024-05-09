@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '~core/main-container/navbar/navbar.component';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AsyncPipe, NgIf } from '@angular/common';
 import {
-  authMeSelector,
   IGetMeResponse,
   me,
-} from '~features/feature-auth/store';
-import { Observable, takeUntil } from 'rxjs';
-import { AsyncPipe, NgIf } from '@angular/common';
+  userMeSelector,
+} from '~features/feature-user/store';
 
 @Component({
   selector: 'together-main-container',
@@ -17,7 +17,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   templateUrl: './main-container.component.html',
 })
 export class MainContainerComponent implements OnInit {
-  me$: Observable<IGetMeResponse | null> = this.store.select(authMeSelector);
+  me$: Observable<IGetMeResponse | null> = this.store.select(userMeSelector);
 
   constructor(private store: Store) {}
 

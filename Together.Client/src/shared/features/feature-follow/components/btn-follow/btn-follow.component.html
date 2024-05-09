@@ -1,0 +1,10 @@
+<button
+  nz-button
+  [nzBlock]="btnBlock"
+  nzShape="round"
+  [nzType]="isFollowing ? 'default' : 'primary'"
+  (click)="onFollow()"
+  [class]="btnClassName"
+>
+  {{ isFollowing ? 'Hủy theo dõi' : 'Theo dõi' }}
+</button>

@@ -12,10 +12,13 @@ public class UserEndpoint : IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/user").WithTags("User").RequireAuthorization();
-        group.MapGet("/profile/{username}", GetProfile);
+        group.MapGet("/me", Me);
+        group.MapGet("/profile/{username}", GetProfile); 
         group.MapPut("/update", UpdateProfile);
     }
 
+    private static Task<Result<GetMeResponse>> Me(ISender sender) => sender.Send(new GetMeQuery());
+    
     private static Task<Result<GetProfileResponse>> GetProfile(ISender sender, string username) 
         => sender.Send(new GetProfileQuery(username));
     

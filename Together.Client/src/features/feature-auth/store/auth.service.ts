@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from '~core/abstractions';
 import {
   IForgotPasswordRequest,
-  IGetMeResponse,
   INewPasswordRequest,
   ISignInRequest,
   ISignInResponse,
@@ -28,13 +27,6 @@ export class AuthService extends BaseService {
     this.setEndpoint('/auth');
   }
 
-  me(): Observable<IGetMeResponse> {
-    const url = this.createUrl('/me');
-    return this.client
-      .get<IResult<IGetMeResponse>>(url)
-      .pipe(map((res) => res.data));
-  }
-
   signIn(payload: ISignInRequest): Observable<ISignInResponse> {
     const url = this.createUrl('/sign-in');
     return this.client
@@ -49,7 +41,7 @@ export class AuthService extends BaseService {
 
   logout(): Observable<any> {
     return of([]).pipe(
-      delay(2500),
+      delay(800),
       tap(() => {
         this.removeToken();
       }),

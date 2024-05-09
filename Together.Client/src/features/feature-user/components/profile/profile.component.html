@@ -1,15 +1,33 @@
 <div>
-  <div class="flex justify-between pt-10">
-    <div>
-      <div class="font-extrabold text-[28px]">{{ profile?.fullName }}</div>
-      <div>&#64;{{ profile?.username }}</div>
+  @if (profile) {
+    <div class="flex justify-between pt-10 gap-x-4">
+      <div>
+        <div class="font-extrabold text-[28px]">{{ profile.fullName }}</div>
+        <div>&#64;{{ profile.username }}</div>
+        <together-profile-follows
+          [userId]="profile.id"
+          [totalFollower]="profile.totalFollower"
+          [totalFollowing]="profile.totalFollowing"
+        />
+        <div *ngIf="profile.bio" class="mt-2">{{ profile.bio }}</div>
+      </div>
+      <together-user-avatar
+        [url]="profile.avatarUrl"
+        [size]="120"
+      />
     </div>
-    <together-user-avatar [url]="profile?.avatarUrl" [size]="80"/>
-  </div>
-  <div class="mt-2">
-    @if (profile?.bio) {
-      <span>{{ profile?.bio }}</span>
+
+    @if (isMe) {
+      <together-profile-editor
+        [profile]="profile"
+      />
+    } @else {
+      <together-btn-follow
+        btnBlock
+        [targetId]="profile.id"
+        [isFollowing]="profile.isFollowing"
+        btnClassName="mt-6"
+      />
     }
-  </div>
-  <together-profile-editor [profile]="profile"/>
+  }
 </div>

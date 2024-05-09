@@ -5,6 +5,9 @@ import {
   getProfile,
   getProfileFailed,
   getProfileSuccess,
+  me,
+  meFailed,
+  meSuccess,
   updateProfile,
   updateProfileFailed,
   updateProfileSuccess,
@@ -12,6 +15,7 @@ import {
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { LoadingService } from '~shared/services';
 
 @Injectable()
 export class UserEffects {
@@ -19,7 +23,26 @@ export class UserEffects {
     private actions$: Actions,
     private userService: UserService,
     private notificationService: NzNotificationService,
+    private loadingService: LoadingService,
   ) {}
+
+  me$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(me),
+      tap(() => {
+        this.loadingService.showGlobalLoading();
+      }),
+      switchMap(() =>
+        this.userService.me().pipe(
+          map((response) => meSuccess({ response })),
+          catchError(() => of(meFailed())),
+        ),
+      ),
+      tap(() => {
+        this.loadingService.hideGlobalLoading();
+      }),
+    ),
+  );
 
   getProfile$ = createEffect(() =>
     this.actions$.pipe(

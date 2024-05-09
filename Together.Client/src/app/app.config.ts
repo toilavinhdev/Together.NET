@@ -15,7 +15,10 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { accessTokenInterceptor } from '~core/interceptors';
+import {
+  accessTokenInterceptor,
+  errorHandlerInterceptor,
+} from '~core/interceptors';
 import {
   AuthEffects,
   authReducer,
@@ -26,15 +29,30 @@ import {
   UserEffects,
   userReducer,
 } from '~features/feature-user/store';
+import {
+  featureFollowKey,
+  FollowEffects,
+  followReducer,
+} from '~shared/features/feature-follow/store';
+import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
 
 registerLocaleData(en);
 
 const stores = {
   [featureAuthKey]: authReducer,
   [featureUserKey]: userReducer,
+  [featureFollowKey]: followReducer,
 };
 
-const effects = [AuthEffects, UserEffects];
+const effects = [AuthEffects, UserEffects, FollowEffects];
+
+const nzConfig: NzConfig = {
+  notification: {
+    nzPlacement: 'bottomRight',
+    nzMaxStack: 5,
+    nzPauseOnHover: true,
+  },
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,9 +60,12 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_US),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([accessTokenInterceptor])),
+    provideHttpClient(
+      withInterceptors([accessTokenInterceptor, errorHandlerInterceptor]),
+    ),
     provideStore(stores),
     provideEffects(effects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideNzConfig(nzConfig),
   ],
 };

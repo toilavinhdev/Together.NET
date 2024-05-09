@@ -1,19 +1,19 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { inject } from '@angular/core';
-import { CommonService } from '~shared/services';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Store } from '@ngrx/store';
+import { logout } from '~features/feature-auth/store';
 
 export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
-  const commonService = inject(CommonService);
   const notificationService = inject(NzNotificationService);
+  const store = inject(Store);
 
   return next(req).pipe(
-    catchError((err, caught) => {
+    catchError((err) => {
       if ([401].includes(err.status)) {
-        console.log('UNAUTHORIZED');
         notificationService.error('Phiên đăng nhập hết hạn', '');
-        commonService.redirectToLogin();
+        store.dispatch(logout());
       }
 
       return throwError(() => err);

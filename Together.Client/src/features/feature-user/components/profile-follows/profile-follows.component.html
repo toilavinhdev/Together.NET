@@ -1,1 +1,29 @@
-<p>profile-follows works!</p>
+<div class="flex gap-x-3 mt-2 *:cursor-pointer">
+  <div (click)="openModal(0)" class="hover:text-primary">{{ totalFollower | number: '1.0-0' }} người theo dõi</div>
+  <div (click)="openModal(1)" class="hover:text-primary">{{ totalFollowing | number: '1.0-0' }} đang theo dõi</div>
+</div>
+
+<nz-modal
+  [(nzVisible)]="visible"
+  [nzClosable]="false"
+  [nzFooter]="null"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  [nzStyle]="{ top: '20px' }"
+  [nzBodyStyle]="{ height: '90vh' }"
+>
+  <ng-container *nzModalContent>
+    <nz-tabset
+      nzCentered
+      [(nzSelectedIndex)]="currentTabIndex"
+      (nzSelectedIndexChange)="onTabChange($event)"
+    >
+      <nz-tab nzTitle="Người theo dõi ({{ totalFollower | number: '1.0-0' }})">
+<!--        <ng-container [ngTemplateOutlet]="list" />-->
+      </nz-tab>
+      <nz-tab nzTitle="Đang theo dõi ({{ totalFollowing | number: '1.0-0'}})">
+<!--        <ng-container [ngTemplateOutlet]="list" />-->
+      </nz-tab>
+    </nz-tabset>
+  </ng-container>
+</nz-modal>

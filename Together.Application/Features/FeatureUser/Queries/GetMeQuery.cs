@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Together.Application.Features.FeatureUser.Exceptions;
 using Together.Application.Features.FeatureUser.Responses;
 using Together.Persistence;
 using Together.Shared.Messaging;
@@ -18,7 +17,7 @@ public class GetMeQuery : IQuery<GetMeResponse>
             var currentUserId = baseService.GetUserClaimsPrincipal().Id;
 
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == currentUserId, cancellationToken);
-            if (user is null) throw new UserNotFoundException();
+            if (user is null) throw new UnauthorizedAccessException();
 
             return new Result<GetMeResponse>().IsSuccess(mapper.Map<GetMeResponse>(user));
         }

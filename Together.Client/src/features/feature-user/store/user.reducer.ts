@@ -1,90 +1,102 @@
-import { IGetProfileResponse } from '~features/feature-user/store/user.models';
+import {
+  IGetMeResponse,
+  IGetProfileResponse,
+} from '~features/feature-user/store/user.models';
 import { createReducer, on } from '@ngrx/store';
 import {
   getProfile,
   getProfileFailed,
   getProfileSuccess,
+  me,
+  meFailed,
+  meSuccess,
   updateProfile,
   updateProfileFailed,
   updateProfileSuccess,
 } from '~features/feature-user/store/user.actions';
 import { StatusType } from '~core/types';
+import { followSuccess } from '~shared/features/feature-follow/store';
 
 export interface UserState {
-  profile: {
-    data: IGetProfileResponse | null;
-    status: StatusType;
-    error: string | null;
-  };
-  updateProfile: {
-    status: StatusType;
-    error: string | null;
-  };
+  me: IGetMeResponse | null;
+  profile: IGetProfileResponse | null;
+  viewMe: boolean;
+  profileStatus: StatusType;
+  profileError: string | null;
+  updateProfileStatus: StatusType;
+  updateProfileError: string | null;
 }
 
 const initialState: UserState = {
-  profile: {
-    data: null,
-    status: 'idle',
-    error: null,
-  },
-  updateProfile: {
-    status: 'idle',
-    error: null,
-  },
+  me: null,
+  profile: null,
+  viewMe: false,
+  profileStatus: 'idle',
+  profileError: null,
+  updateProfileStatus: 'idle',
+  updateProfileError: null,
 };
 
 export const userReducer = createReducer(
   initialState,
+  on(me, (state) => ({ ...state, loading: true })),
+  on(meSuccess, (state, { response }) => ({
+    ...state,
+    loading: false,
+    me: response,
+  })),
+  on(meFailed, (state) => ({ ...state, loading: false })),
   on(getProfile, (state) => ({
     ...state,
-    profile: {
-      ...state.profile,
-      status: 'loading' as const,
-      error: null,
-    },
+    profileStatus: 'loading' as const,
+    profileError: null,
   })),
   on(getProfileSuccess, (state, { profile }) => ({
     ...state,
-    profile: {
-      ...state.profile,
-      data: profile,
-      status: 'success' as const,
-    },
+    profile,
+    profileStatus: 'success' as const,
+    profileError: null,
+    viewMe: profile.id == state.me!.id,
   })),
   on(getProfileFailed, (state, { errorCode }) => ({
     ...state,
-    profile: {
-      ...state.profile,
-      status: 'failed' as const,
-      error: errorCode,
-    },
+    profileStatus: 'failed' as const,
+    profileError: errorCode,
   })),
   on(updateProfile, (state) => ({
     ...state,
-    updateProfile: {
-      ...state.updateProfile,
-      status: 'loading' as const,
-      error: null,
-    },
+    updateProfileStatus: 'loading' as const,
+    updateProfileError: null,
   })),
   on(updateProfileSuccess, (state, { payload }) => ({
     ...state,
-    updateProfile: {
-      ...state.updateProfile,
-      status: 'success' as const,
-    },
+    updateProfileStatus: 'success' as const,
+    updateProfileError: null,
     profile: {
-      ...state.profile,
-      data: { ...state.profile.data!, ...payload },
+      ...state.profile!,
+      ...payload,
     },
   })),
   on(updateProfileFailed, (state, { errorCode }) => ({
     ...state,
-    updateProfile: {
-      ...state.updateProfile,
-      status: 'failed' as const,
-      error: errorCode,
+    updateProfileStatus: 'failed' as const,
+    updateProfileError: errorCode,
+  })),
+  //extra
+  on(followSuccess, (state, { userId, follow }) => ({
+    ...state,
+    profile: {
+      ...state.profile!,
+      isFollowing:
+        state.profile!.id === userId
+          ? !state.profile!.isFollowing
+          : state.profile!.isFollowing,
+      totalFollower: state.viewMe
+        ? state.profile!.totalFollower
+        : state.profile!.totalFollower + (follow ? 1 : -1),
+      totalFollowing: state.viewMe
+        ? state.profile!.totalFollowing + (follow ? 1 : -1)
+        : state.profile!.totalFollowing,
     },
   })),
 );

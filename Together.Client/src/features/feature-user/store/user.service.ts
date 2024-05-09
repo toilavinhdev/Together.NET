@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '~core/abstractions';
 import { map, Observable } from 'rxjs';
 import {
+  IGetMeResponse,
   IGetProfileResponse,
   IUpdateProfileRequest,
 } from '~features/feature-user/store/user.models';
@@ -15,6 +16,13 @@ export class UserService extends BaseService {
   constructor(private client: HttpClient) {
     super();
     this.setEndpoint('/user');
+  }
+
+  me(): Observable<IGetMeResponse> {
+    const url = this.createUrl('/me');
+    return this.client
+      .get<IResult<IGetMeResponse>>(url)
+      .pipe(map((res) => res.data));
   }
 
   profile(username: string): Observable<IGetProfileResponse> {
