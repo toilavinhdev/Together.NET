@@ -5,6 +5,7 @@
   [nzType]="isFollowing ? 'default' : 'primary'"
   (click)="onFollow()"
   [class]="btnClassName"
+  [nzLoading]="loading"
 >
   {{ isFollowing ? 'Hủy theo dõi' : 'Theo dõi' }}
 </button>

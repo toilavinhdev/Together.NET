@@ -1,6 +1,6 @@
 <div class="flex gap-x-3 mt-2 *:cursor-pointer">
-  <div (click)="openModal(0)" class="hover:text-primary">{{ totalFollower | number: '1.0-0' }} người theo dõi</div>
-  <div (click)="openModal(1)" class="hover:text-primary">{{ totalFollowing | number: '1.0-0' }} đang theo dõi</div>
+  <div (click)="openModal(0)" class="hover:text-primary hover:underline">{{ totalFollower | number: '1.0-0' }} người theo dõi</div>
+  <div (click)="openModal(1)" class="hover:text-primary hover:underline">{{ totalFollowing | number: '1.0-0' }} đang theo dõi</div>
 </div>
 
 <nz-modal
@@ -13,17 +13,67 @@
   [nzBodyStyle]="{ height: '90vh' }"
 >
   <ng-container *nzModalContent>
-    <nz-tabset
-      nzCentered
-      [(nzSelectedIndex)]="currentTabIndex"
-      (nzSelectedIndexChange)="onTabChange($event)"
-    >
-      <nz-tab nzTitle="Người theo dõi ({{ totalFollower | number: '1.0-0' }})">
-<!--        <ng-container [ngTemplateOutlet]="list" />-->
-      </nz-tab>
-      <nz-tab nzTitle="Đang theo dõi ({{ totalFollowing | number: '1.0-0'}})">
-<!--        <ng-container [ngTemplateOutlet]="list" />-->
-      </nz-tab>
-    </nz-tabset>
+    @if (currentTabIndex === 0) {
+      <div class="text-center font-semibold">Người theo dõi ({{ totalFollower | number: '1.0-0' }})</div>
+      <ng-container
+        [ngTemplateOutlet]="followsTpl"
+        [ngTemplateOutletContext]="{$implicit: (followers$ | async)?.result}"
+      />
+    } @else if (currentTabIndex === 1) {
+      <div class="text-center font-semibold">Đang theo dõi ({{ totalFollowing | number: '1.0-0'}})</div>
+      <ng-container
+        [ngTemplateOutlet]="followsTpl"
+        [ngTemplateOutletContext]="{$implicit: (followings$ | async)?.result}"
+      />
+    }
   </ng-container>
 </nz-modal>
+
+
+<ng-template #followsTpl let-data>
+  <cdk-virtual-scroll-viewport
+    togetherScrollEndReach
+    (endReached)="onEndReach()"
+    [thresholdPx]="5"
+    itemSize="50"
+    class="h-[calc(90vh-80px)] w-full mt-2"
+  >
+    <div
+      *cdkVirtualFor="let follow of data"
+      class="h-[50px] flex justify-between items-center px-2 mt-1"
+    >
+      <div (click)="navigateToProfile(follow['username'])"
+           class="flex items-center gap-x-2 cursor-pointer">
+        <together-user-avatar
+          [url]="follow['avatarUrl']"
+          [size]="36"
+        />
+        <div>
+          <div class="font-semibold hover:underline">{{ follow['fullName'] }}</div>
+          <div class="text-xs">&#64;{{ follow['username'] }}</div>
+        </div>
+      </div>
+      @if (meId !== follow['userId']) {
+        <together-btn-follow
+          [isFollowing]="follow['isFollowing']"
+          [targetId]="follow['userId']"
+          [loading]="follow['loading']"
+        />
+      }
+    </div>
+    @if(status === 'loading') {
+      <nz-skeleton
+        [nzAvatar]="true"
+        [nzParagraph]="{ rows: 0}"
+      />
+      <nz-skeleton
+        [nzAvatar]="true"
+        [nzParagraph]="{ rows: 0}"
+      />
+      <nz-skeleton
+        [nzAvatar]="true"
+        [nzParagraph]="{ rows: 0}"
+      />
+    }
+  </cdk-virtual-scroll-viewport>
+</ng-template>

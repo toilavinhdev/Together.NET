@@ -18,7 +18,7 @@ export const followSuccess = createAction(
 );
 export const followFailed = createAction(
   FOLLOW_FAILED,
-  props<{ errorCode: string }>(),
+  props<{ userId: string; errorCode: string }>(),
 );
 
 export const listFollow = createAction(
@@ -27,7 +27,7 @@ export const listFollow = createAction(
 );
 export const listFollowSuccess = createAction(
   LIST_FOLLOW_SUCCESS,
-  props<{ data: IListFollowResponse }>(),
+  props<{ data: IListFollowResponse; follower: boolean }>(),
 );
 export const listFollowFailed = createAction(
   LIST_FOLLOW_FAILED,

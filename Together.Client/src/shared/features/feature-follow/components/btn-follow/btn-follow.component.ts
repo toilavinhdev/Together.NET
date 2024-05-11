@@ -15,11 +15,11 @@ export class BtnFollowComponent {
   @Input() isFollowing = false;
   @Input({ transform: booleanAttribute }) btnBlock = false;
   @Input() btnClassName = '';
+  @Input() loading = false;
 
   constructor(private store: Store) {}
 
   onFollow() {
-    console.log(1111);
     this.store.dispatch(follow({ userId: this.targetId }));
   }
 }

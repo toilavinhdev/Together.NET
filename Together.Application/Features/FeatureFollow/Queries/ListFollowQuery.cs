@@ -39,7 +39,7 @@ public class ListFollowQuery : IQuery<ListFollowResponse>, IPaginationRequest
                 var query = context.Follows
                     .Include(x => x.Source)
                     .ThenInclude(x => x.Followers!.Where(f => f.TargetId == currentUserId))
-                    .Where(x => x.TargetId == currentUserId)
+                    .Where(x => x.TargetId == request.UserId)
                     .OrderByDescending(x => x.Source.Followers!.Any(f => f.SourceId == currentUserId))
                     .ThenByDescending(x => x.CreatedAt);
                 
@@ -67,7 +67,7 @@ public class ListFollowQuery : IQuery<ListFollowResponse>, IPaginationRequest
                 var query = context.Follows
                     .Include(x => x.Target)
                     .ThenInclude(x => x.Followers!.Where(f => f.SourceId == currentUserId))
-                    .Where(x => x.SourceId == currentUserId)
+                    .Where(x => x.SourceId == request.UserId)
                     .OrderByDescending(x => x.Target.Followers!.Any(f => f.SourceId == currentUserId))
                     .ThenByDescending(x => x.CreatedAt);
                 

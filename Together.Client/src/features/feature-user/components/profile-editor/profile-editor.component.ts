@@ -30,7 +30,7 @@ import {
   updateProfile,
   userUpdateProfileStatusSelector,
 } from '~features/feature-user/store';
-import { Observable, takeUntil } from 'rxjs';
+import { Observable, of, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { StatusType } from '~core/types';
 import { AsyncPipe } from '@angular/common';
@@ -139,6 +139,8 @@ export class ProfileEditorComponent extends BaseComponent implements OnInit {
 
   handleCancel(): void {
     this.visible = false;
-    this.profileForm.reset();
+    setTimeout(() => {
+      this.profileForm.reset();
+    }, 300);
   }
 }

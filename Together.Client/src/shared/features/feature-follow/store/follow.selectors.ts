@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { FollowState } from '~shared/features/feature-follow/store/follow.reducer';
+import { IListFollowResponse } from '~shared/features/feature-follow/store/follow.models';
 
 export const featureFollowKey = 'featureFollow ';
 
@@ -11,12 +12,20 @@ export const followListStatusSelector = createSelector(
   (state) => state.listStatus,
 );
 
-export const followListDataSelector = createSelector(
+export const followersSelector = createSelector(
   featureFollowSelector,
-  (state) => state.follows,
+  (state) =>
+    ({
+      result: state.followers,
+      pagination: state.followersPagination,
+    }) as IListFollowResponse,
 );
 
-export const followListPaginationSelector = createSelector(
+export const followingsSelector = createSelector(
   featureFollowSelector,
-  (state) => state.pagination,
+  (state) =>
+    ({
+      result: state.followings,
+      pagination: state.followingsPagination,
+    }) as IListFollowResponse,
 );

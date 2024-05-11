@@ -20,3 +20,7 @@ export interface IFollowViewModel {
   avatarUrl?: string;
   isFollowing: boolean;
 }
+
+export interface IFollowViewModelWithLoading extends IFollowViewModel {
+  loading: boolean;
+}
