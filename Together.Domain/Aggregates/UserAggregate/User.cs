@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Together.Domain.Abstractions;
+using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Domain.Aggregates.FollowAggregate;
 using Together.Shared.Enums;
 
@@ -38,4 +39,10 @@ public class User : TimeTrackingEntity, IAggregateRoot
     
     [InverseProperty(nameof(Follow.Source))]
     public List<Follow>? Followings { get; set; }
+    
+    [InverseProperty(nameof(Message.Sender))]
+    public List<Message>? SentMessages { get; set; }
+    
+    [InverseProperty(nameof(ConversationParticipant.User))]
+    public List<ConversationParticipant>? ConversationParticipants { get; set; }
 }

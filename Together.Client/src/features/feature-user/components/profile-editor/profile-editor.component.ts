@@ -32,7 +32,7 @@ import {
 } from '~features/feature-user/store';
 import { Observable, of, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { StatusType } from '~core/types';
+import { StatusType } from '../../../../shared/types';
 import { AsyncPipe } from '@angular/common';
 import { EGender } from '~shared/enums';
 

@@ -7,7 +7,7 @@ import {
   IUpdateProfileRequest,
 } from '~features/feature-user/store/user.models';
 import { HttpClient } from '@angular/common/http';
-import { IResult } from '~core/models';
+import { IResult } from '~shared/models';
 
 @Injectable({
   providedIn: 'root',

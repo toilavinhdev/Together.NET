@@ -11,7 +11,7 @@ import {
   IVerifyForgotPasswordRequest,
 } from '~features/feature-auth/store/auth.models';
 import { delay, map, Observable, of, tap } from 'rxjs';
-import { IResult } from '~core/models';
+import { IResult } from '~shared/models';
 import { jwtDecode } from 'jwt-decode';
 import {
   ACCESS_TOKEN,

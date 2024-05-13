@@ -14,7 +14,7 @@ import {
   updateProfileFailed,
   updateProfileSuccess,
 } from '~features/feature-user/store/user.actions';
-import { StatusType } from '~core/types';
+import { StatusType } from '~shared/types';
 import { followSuccess } from '~shared/features/feature-follow/store';
 
 export interface UserState {

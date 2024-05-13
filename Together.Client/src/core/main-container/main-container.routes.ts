@@ -28,9 +28,9 @@ export const routes: Routes = [
           ).then((r) => r.routes),
       },
       {
-        path: 'messenger',
+        path: 'inbox',
         loadChildren: () =>
-          import('~features/feature-messenger/feature-messenger.routes').then(
+          import('~features/feature-inbox/feature-inbox.routes').then(
             (r) => r.routes,
           ),
       },

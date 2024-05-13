@@ -26,7 +26,7 @@ import {
 } from '~shared/features/feature-follow/store';
 import { NzSkeletonComponent } from 'ng-zorro-antd/skeleton';
 import { ScrollEndReachDirective } from '~shared/directives';
-import { StatusType } from '~core/types';
+import { StatusType } from '../../../../shared/types';
 import { Router, RouterLink } from '@angular/router';
 import { userMeSelector } from '~features/feature-user/store';
 

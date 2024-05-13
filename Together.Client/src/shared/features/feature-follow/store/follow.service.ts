@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '~core/abstractions';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { IResult } from '~core/models';
+import { IResult } from '~shared/models';
 import {
   IListFollowRequest,
   IListFollowResponse,

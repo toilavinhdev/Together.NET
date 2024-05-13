@@ -13,7 +13,7 @@ import {
   userProfileStatusSelector,
 } from '~features/feature-user/store';
 import { ProfileComponent } from '~features/feature-user/components/profile/profile.component';
-import { StatusType } from '~core/types';
+import { StatusType } from '../../shared/types';
 import { AsyncPipe } from '@angular/common';
 
 @Component({

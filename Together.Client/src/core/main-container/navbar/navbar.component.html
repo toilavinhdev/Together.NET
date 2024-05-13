@@ -1,4 +1,4 @@
-<div class="w-[62px] fixed left-0 h-screen shadow-lg flex flex-col justify-between">
+<div class="w-[62px] fixed left-0 h-screen flex flex-col justify-between shadow">
   <!-- logo -->
   <div>
 
@@ -20,9 +20,9 @@
          class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
       <together-svg-icon [name]="getIcon('/notifications', 'heart', 'heart-filled')"/>
     </div>
-    <div routerLink="/messenger"
+    <div routerLink="/inbox"
          class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
-      <together-svg-icon [name]="getIcon('/messenger', 'message', 'message-filled')"/>
+      <together-svg-icon [name]="getIcon('/inbox', 'message', 'message-filled')"/>
     </div>
     <div routerLink="/profile/{{(me$ | async)?.username}}"
          class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">

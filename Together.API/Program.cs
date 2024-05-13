@@ -4,8 +4,10 @@ using Together.API;
 using Together.API.Extensions;
 using Together.Application;
 using Together.Application.Behaviors;
+using Together.Application.WebSockets;
 using Together.Persistence;
 using Together.Shared.ValueObjects;
+using Together.Shared.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.SetupEnvironment<AppSettings>(nameof(AppSettings), out var appSettings);
@@ -31,6 +33,7 @@ services.AddDbContext<TogetherContext>(o =>
     o.UseSqlServer(appSettings.SqlServerConfig.ConnectionString);
 });
 services.AddServiceCollections();
+services.AddWebSocketManager(ApplicationAssembly.Assembly);
 
 var app = builder.Build();
 app.UseDefaultExceptionHandler();
@@ -40,6 +43,7 @@ app.UseSwaggerDocument(Metadata.Name);
 app.MapEndpointDefinitions(app.MapGroup("/api"));
 app.UseWebSockets();
 
+app.MapWebSocketHandler<WebSocketConnectionHandler>("/ws");
 app.Map("/", () => Metadata.Name);
 app.Run();
 

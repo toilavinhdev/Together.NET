@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
 using Together.API.Extensions;
+using Together.Application.WebSockets;
 using Together.Domain.Aggregates.FollowAggregate;
 using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
@@ -9,18 +10,21 @@ using Together.Shared.Extensions;
 
 namespace Together.API.Endpoints;
 
-public class FakerEndpoint : IEndpoint
+public class TestEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/faker").WithTags("Faker");
+        var group = app.MapGroup("/test").WithTags("Test");
+
+        group.MapGet("/ws/connections", (WebSocketConnectionHandler handler) => handler.ConnectionManager.GetAll());
         
-        group.MapPost("/users",  async (
+        group.MapPost("/fakers/users",  async (
             TogetherContext context, 
+            string username,
             int count, 
             string locale = "vi") =>
         {
-            var me = await context.Users.FirstOrDefaultAsync(x => x.Username == "toilavinh");
+            var me = await context.Users.FirstOrDefaultAsync(x => x.Username == username);
             if (me is null) return Results.BadRequest();
             
             var faker = new Faker<User>(locale)
@@ -33,12 +37,14 @@ public class FakerEndpoint : IEndpoint
                 .RuleFor(x => x.Dob, f => f.Date.Past(40))
                 .RuleFor(x => x.Gender, f => f.PickRandom<Gender>())
                 .RuleFor(x => x.AvatarUrl, f => f.Internet.Avatar())
-                .RuleFor(x => x.Followings, (f, u) => [new Follow()
-                {
-                    Id = Guid.NewGuid(),
-                    TargetId = me.Id,
-                    CreatedAt = DateTime.Now
-                }]);
+                .RuleFor(x => x.Followings, (f, u) => [
+                    new Follow()
+                    {
+                        Id = Guid.NewGuid(),
+                        TargetId = me.Id,
+                        CreatedAt = DateTime.Now
+                    }
+                ]);
 
             var users = faker.Generate(count);
             

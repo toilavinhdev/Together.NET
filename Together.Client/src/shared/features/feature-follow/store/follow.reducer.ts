@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
-import { StatusType } from '~core/types';
+import { StatusType } from '~shared/types';
 import {
   IFollowViewModel,
   IFollowViewModelWithLoading,
 } from '~shared/features/feature-follow/store/follow.models';
-import { IPagination } from '~core/models';
+import { IPagination } from '~shared/models';
 import {
   follow,
   followFailed,

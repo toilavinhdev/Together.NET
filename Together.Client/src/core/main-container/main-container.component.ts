@@ -9,6 +9,7 @@ import {
   me,
   userMeSelector,
 } from '~features/feature-user/store';
+import { WebSocketService } from '~shared/services';
 
 @Component({
   selector: 'together-main-container',
@@ -19,9 +20,15 @@ import {
 export class MainContainerComponent implements OnInit {
   me$: Observable<IGetMeResponse | null> = this.store.select(userMeSelector);
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private webSocketService: WebSocketService,
+  ) {}
 
   ngOnInit() {
     this.store.dispatch(me());
+    this.webSocketService.getClient().subscribe((val) => {
+      console.log('WebSocketReceived', val);
+    });
   }
 }

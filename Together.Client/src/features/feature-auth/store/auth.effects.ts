@@ -30,7 +30,11 @@ import {
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonService, LoadingService } from '~shared/services';
+import {
+  CommonService,
+  LoadingService,
+  WebSocketService,
+} from '~shared/services';
 
 @Injectable()
 export class AuthEffects {
@@ -40,6 +44,7 @@ export class AuthEffects {
     private notificationService: NzNotificationService,
     private commonService: CommonService,
     private loadingService: LoadingService,
+    private webSocketService: WebSocketService,
   ) {}
 
   init$ = createEffect(() =>
@@ -135,6 +140,7 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(logoutSuccess),
         tap(() => {
+          this.webSocketService.disconnect();
           this.commonService.redirectToLogin();
         }),
       ),

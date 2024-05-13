@@ -58,7 +58,9 @@ public class FollowCommand : ICommand<bool>
 
             return new Result<bool>().IsSuccess(
                 existed is null,
-                existed is null ? "Tạo lượt theo dõi thành công" : "Hủy theo dõi thành công");
+                existed is null 
+                    ? "Tạo lượt theo dõi thành công" 
+                    : "Hủy theo dõi thành công");
         }
     }
 }

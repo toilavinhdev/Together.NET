@@ -2,7 +2,9 @@
 
 public interface ISoftDeleteEntity
 {
-    bool IsDeleted { get; set; }
+    Guid? DeletedById { get; set; }
     
-    DateTime DeletedAt { get; set; }
+    DateTime? DeletedAt { get; set; }
+
+    void MarkDeleted(Guid userId);
 }

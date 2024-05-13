@@ -35,6 +35,11 @@ import {
   followReducer,
 } from '~shared/features/feature-follow/store';
 import { NzConfig, provideNzConfig } from 'ng-zorro-antd/core/config';
+import {
+  featureMessageKey,
+  MessageEffects,
+  messageReducer,
+} from '~features/feature-inbox/store';
 
 registerLocaleData(en);
 
@@ -42,9 +47,10 @@ const stores = {
   [featureAuthKey]: authReducer,
   [featureUserKey]: userReducer,
   [featureFollowKey]: followReducer,
+  [featureMessageKey]: messageReducer,
 };
 
-const effects = [AuthEffects, UserEffects, FollowEffects];
+const effects = [AuthEffects, UserEffects, FollowEffects, MessageEffects];
 
 const nzConfig: NzConfig = {
   notification: {

@@ -2,7 +2,7 @@ import {
   IBaseParams,
   IPaginationRequest,
   IPaginationResult,
-} from '~core/models';
+} from '~shared/models';
 
 export interface IListFollowRequest extends IPaginationRequest, IBaseParams {
   userId: string;

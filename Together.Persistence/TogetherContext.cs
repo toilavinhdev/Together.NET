@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Domain.Aggregates.FileAggregate;
 using Together.Domain.Aggregates.FollowAggregate;
 using Together.Domain.Aggregates.UserAggregate;
@@ -14,6 +15,12 @@ public class TogetherContext(DbContextOptions<TogetherContext> options) : DbCont
     public DbSet<UserToken> UserTokens { get; init; } = default!;
     
     public DbSet<Follow> Follows { get; init; } = default!;
+    
+    public DbSet<Conversation> Conversations { get; init; } = default!;
+    
+    public DbSet<ConversationParticipant> ConversationParticipants { get; init; } = default!;
+    
+    public DbSet<Message> Messages { get; init; } = default!;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

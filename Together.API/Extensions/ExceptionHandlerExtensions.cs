@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
+using Together.Shared.Constants;
 using Together.Shared.Exceptions;
 using Together.Shared.ValueObjects;
 
@@ -52,7 +53,7 @@ public static class ExceptionHandlerExtensions
         switch (ex)
         {
             case UnauthorizedAccessException:
-                return [new ResultError("UNAUTHORIZED", "Unauthorized")];
+                return [new ResultError(ErrorCodeConstants.Server.Unauthorized, "Unauthorized")];
             case ValidationException vEx:
                 return vEx.Errors
                     .Select(failure => new ResultError(failure.ErrorCode, failure.ErrorMessage, failure.PropertyName))
@@ -79,6 +80,6 @@ public static class ExceptionHandlerExtensions
     {
         return ex is DomainException dEx 
             ? new ResultError(dEx.Code, dEx.Detail, dEx.Parameter)
-            : new ResultError("INTERNAL_SERVER_ERROR", ex.Message);
+            : new ResultError(ErrorCodeConstants.Server.InternalServer, ex.Message);
     }
 }

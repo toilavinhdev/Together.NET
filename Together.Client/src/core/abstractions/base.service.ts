@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '~env/environment';
 import { HttpParams } from '@angular/common/http';
-import { IBaseParams } from '~core/models';
+import { IBaseParams } from '../../shared/models';
 
 @Injectable()
 export class BaseService {
