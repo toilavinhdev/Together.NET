@@ -19,7 +19,6 @@ public class WebSocketConnectionHandler(ConnectionManager connectionManager) : W
         switch (message.Target)
         {
             case WebSocketTargets.Ping:
-                await SendMessageAsync(socketId, "Pong");
                 break;
             case WebSocketTargets.TypingMessage:
                 break;

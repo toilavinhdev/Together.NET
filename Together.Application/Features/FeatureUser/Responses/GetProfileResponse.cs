@@ -1,4 +1,4 @@
-﻿using Together.Shared.Enums;
+﻿using Together.Domain.Aggregates.UserAggregate;
 
 namespace Together.Application.Features.FeatureUser.Responses;
 

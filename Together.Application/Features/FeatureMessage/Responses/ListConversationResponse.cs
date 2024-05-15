@@ -15,8 +15,10 @@ public class ConversationViewModel
     public string LastMessage { get; set; } = default!;
     
     public string LastMessageBySenderUsername { get; set; } = default!;
+
+    public string ConversationTitle { get; set; } = default!;
     
-    public string? LastMessageBySenderAvatarUrl { get; set; }
+    public string? ConversationImageUrl { get; set; }
     
     public DateTime LastMessageAt { get; set; }
 }

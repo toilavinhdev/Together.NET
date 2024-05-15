@@ -1,21 +1,23 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Together.Application.Features.FeatureMessage.Exceptions;
 using Together.Application.Features.FeatureMessage.Responses;
 using Together.Application.Features.FeatureUser.Exceptions;
+using Together.Application.WebSockets;
 using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Persistence;
 using Together.Shared.Constants;
+using Together.Shared.Extensions;
 using Together.Shared.Messaging;
 using Together.Shared.Services;
 using Together.Shared.ValueObjects;
+using Together.Shared.WebSockets;
 
 namespace Together.Application.Features.FeatureMessage.Commands;
 
 public class SendMessageCommand : ICommand<SendMessageResponse>
 {
-    public Guid? ReceiveId { get; set; }
-    
     public Guid? ConversationId { get; set; }
 
     public string Text { get; set; } = default!;
@@ -27,86 +29,61 @@ public class SendMessageCommand : ICommand<SendMessageResponse>
             RuleFor(x => x.Text)
                 .NotNull()
                 .MaximumLength(512);
-            RuleFor(x => new { x.ConversationId, x.ReceiveId })
-                .Must(x => x.ConversationId.HasValue ^ x.ReceiveId.HasValue)
-                .WithErrorCode(ErrorCodeConstants.Conversation.RequestSendMessageInvalid)
-                .When(x => x.ConversationId.HasValue && x.ReceiveId.HasValue);
+            RuleFor(x => x.ConversationId)
+                .NotEmpty();
         }
     }
     
-    internal class Handler(TogetherContext context, IBaseService baseService, IMapper mapper) : ICommandHandler<SendMessageCommand, SendMessageResponse>
+    internal class Handler(
+        TogetherContext context, 
+        IBaseService baseService, 
+        IMapper mapper,
+        WebSocketConnectionHandler webSocketConnectionHandler
+    ) : ICommandHandler<SendMessageCommand, SendMessageResponse>
     {
         public async Task<Result<SendMessageResponse>> Handle(SendMessageCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = baseService.GetUserClaimsPrincipal().Id;
             var currentUser = await context.Users.FirstOrDefaultAsync(x => x.Id == currentUserId, cancellationToken);
             if (currentUser is null) throw new UserNotFoundException(currentUserId.ToString());
+
+            var conversation = await context.Conversations
+                .Include(c => c.ConversationParticipants)
+                .FirstOrDefaultAsync(c => c.Id == request.ConversationId, cancellationToken);
+            if (conversation is null) throw new ConversationNotFoundException(request.ConversationId.ToString());
+
+            var message = new Message
+            {
+                Id = Guid.NewGuid(),
+                Text = request.Text,
+                SenderId = currentUserId,
+                ConversationId = conversation.Id,
+            };
+            message.MarkCreated();
+
+            await context.Messages.AddAsync(message, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+
+            var data = mapper.Map<SendMessageResponse>(message);
+
+            var participantIds = conversation.ConversationParticipants
+                .Select(cp => cp.UserId)
+                .Where(id => id != currentUserId)
+                .ToList();
             
-            if (request.ReceiveId is not null)
+            foreach (var userId in participantIds)
             {
-                var receiver = await context.Users.FirstOrDefaultAsync(x => x.Id == request.ReceiveId, cancellationToken);
-                if (receiver is null) throw new UserNotFoundException(request.ReceiveId.ToString());
-
-                var conversation = await context.Conversations
-                    .Include(x => x.ConversationParticipants)
-                    .FirstOrDefaultAsync(c =>
-                            c.Type == ConversationType.Normal &&
-                            c.ConversationParticipants.Count == 2 &&
-                            c.ConversationParticipants.Any(cp => cp.UserId == currentUser.Id) &&
-                            c.ConversationParticipants.Any(cp => cp.UserId == receiver.Id),
-                        cancellationToken);
-
-                var message = new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = request.Text,
-                    SenderId = currentUserId,
-                };
-                message.MarkCreated();
-                
-                if (conversation is not null)
-                {
-                    message.ConversationId = conversation.Id;
-                    await context.Messages.AddAsync(message, cancellationToken);
-                }
-                else
-                {
-                    conversation = new Conversation
+                Console.WriteLine("1");
+                await webSocketConnectionHandler.SendMessageAsync(
+                    userId.ToString(), 
+                    new WebSocketMessage<SendMessageResponse>()
                     {
-                        Id = Guid.NewGuid(),
-                        Type = ConversationType.Normal,
-                        ConversationParticipants =
-                        [
-                            new ConversationParticipant
-                            {
-                                Id = Guid.NewGuid(),
-                                UserId = currentUserId
-                            },
-                            new ConversationParticipant
-                            {
-                                Id = Guid.NewGuid(),
-                                UserId = receiver.Id
-                            }
-                        ],
-                        Messages = [message]
-                    };
-                    conversation.MarkUserCreated(currentUserId);
-                        
-                    await context.Conversations.AddAsync(conversation, cancellationToken);
-                }
-
-                await context.SaveChangesAsync(cancellationToken);
-                
-                return new Result<SendMessageResponse>().IsSuccess(mapper.Map<SendMessageResponse>(message));
+                        Target = WebSocketTargets.ReceiveMessage,
+                        Data = data
+                    }.ToJson());
             }
-            else
-            {
-                return new Result<SendMessageResponse>().IsSuccess(
-                    new SendMessageResponse
-                    {
 
-                    });
-            }
+            return new Result<SendMessageResponse>().IsSuccess(data);
         }
     }
 }

@@ -44,5 +44,7 @@ public static class ErrorCodeConstants
     public static class Conversation
     {
         public const string RequestSendMessageInvalid = "REQUEST_SEND_MESSAGE_INVALID";
+        public const string ConversationExisted = "CONVERSATION_EXISTED";
+        public const string ConversationNotFound = "CONVERSATION_NOT_FOUND";
     }
 }

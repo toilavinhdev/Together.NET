@@ -5,7 +5,6 @@ using Together.Application.WebSockets;
 using Together.Domain.Aggregates.FollowAggregate;
 using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
-using Together.Shared.Enums;
 using Together.Shared.Extensions;
 
 namespace Together.API.Endpoints;

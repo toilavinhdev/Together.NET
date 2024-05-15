@@ -1,9 +1,9 @@
 <div class="shadow">
-  <div class="px-6 mt-5">
+  <div class="px-6 pt-5">
     <div class="font-extrabold text-[16px]">Tin nhắn gần đây</div>
   </div>
 
-  <cdk-virtual-scroll-viewport itemSize="60" class="h-screen mt-5">
+  <cdk-virtual-scroll-viewport itemSize="72" class="h-screen mt-5">
     <div
       routerLink="/inbox/{{conversation['id']}}"
       *cdkVirtualFor="let conversation of (conversations | async)"
@@ -11,12 +11,16 @@
               {{selectedConversationId === conversation['id'] ? 'bg-gray-200 ' : ''}}"
     >
       <together-user-avatar
-        [url]="conversation['lastMessageBySenderAvatarUrl']"
+        [url]="conversation['conversationImageUrl'] ?? undefined"
         [size]="48"
       />
       <div>
-        <div class="">{{ conversation['lastMessageBySenderUsername'] }}</div>
-        <div class="text-gray-500 text-xs">{{ conversation['lastMessage'] }}</div>
+        <div class="">{{ conversation['conversationTitle'] }}</div>
+        <div class="text-gray-500 text-xs">
+          <span>{{ conversation['lastMessageBySenderUsername'] === currentUsername ? "Bạn: " : "" }}</span>
+          <span>{{ conversation['lastMessage'] }}</span>
+          <span> - {{ conversation['lastMessageAt'] | timeAgo }}</span>
+        </div>
       </div>
     </div>
   </cdk-virtual-scroll-viewport>

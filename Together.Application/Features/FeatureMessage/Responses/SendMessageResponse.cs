@@ -11,6 +11,8 @@ public class SendMessageResponse
     public string SenderUsername { get; set; } = default!;
     
     public string? SenderAvatarUrl { get; set; }
+    
+    public DateTime CreatedAt { get; set; }
 
     public string Text { get; set; } = default!;
 }

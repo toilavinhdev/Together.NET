@@ -15,7 +15,8 @@ export interface IConversationViewModel {
   id: string;
   lastMessage: string;
   lastMessageBySenderUsername: string;
-  lastMessageBySenderAvatar: string;
+  conversationImageUrl?: string;
+  conversationTitle: string;
   lastMessageAt: string;
 }
 
@@ -26,15 +27,30 @@ export interface IGetConversationRequest
 }
 
 export interface IGetConversationResponse
-  extends IPaginationResult<IMessageViewModel> {}
+  extends IPaginationResult<IMessageViewModel> {
+  conversationId: string;
+}
 
 export interface IMessageViewModel {
   id: string;
   text: string;
+  senderId: string;
   senderUsername: string;
   senderAvatarUrl?: string;
+  sendAt: string;
 }
 
-export interface IConservationData extends IConversationViewModel {
-  messages: IMessageViewModel[];
+export interface ISendMessageRequest {
+  conversationId: string;
+  text: string;
+}
+
+export interface ISendMessageResponse {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderUsername: string;
+  senderAvatarUrl?: string;
+  text: string;
+  createdAt: string;
 }

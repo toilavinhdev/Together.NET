@@ -6,12 +6,17 @@ export const featureMessageKey = 'featureMessage';
 export const featureMessageSelector =
   createFeatureSelector<MessageState>(featureMessageKey);
 
-export const messageConversationsSelector = createSelector(
+export const messageListConversationSelector = createSelector(
   featureMessageSelector,
-  (state) => state.conversations,
+  (state) => state.listConversation,
 );
 
-export const messageConversationsStatusSelector = createSelector(
+export const messageListConversationStatusSelector = createSelector(
   featureMessageSelector,
-  (state) => state.listConversationsStatus,
+  (state) => state.listConversationStatus,
+);
+
+export const messageConversationSelector = createSelector(
+  featureMessageSelector,
+  (state) => state.conversation,
 );

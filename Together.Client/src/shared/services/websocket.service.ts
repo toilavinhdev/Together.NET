@@ -4,20 +4,23 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { interval } from 'rxjs';
 import { webSocketTargets } from '~shared/constants';
 import { IWebSocketMessage } from '~shared/models';
+import { AuthService } from '~features/feature-auth/store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
-  private readonly URL =
-    environment.baseWebSocketUrl +
-    '/ws' +
-    '?id=2656354c-6423-48f5-82d9-2906a815f648';
+  private readonly baseUrl = environment.baseWebSocketUrl;
 
-  private _client$: WebSocketSubject<any> = webSocket(this.URL);
+  private _client$: WebSocketSubject<any> = webSocket(this.createUrl());
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.keepConnect();
+  }
+
+  private createUrl() {
+    const userId = this.authService.getUserClaimsPrincipal()?.id ?? '';
+    return this.baseUrl + '/ws?id=' + userId;
   }
 
   private keepConnect() {

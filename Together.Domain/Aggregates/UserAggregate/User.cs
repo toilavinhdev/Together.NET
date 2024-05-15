@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Together.Domain.Abstractions;
 using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Domain.Aggregates.FollowAggregate;
-using Together.Shared.Enums;
 
 namespace Together.Domain.Aggregates.UserAggregate;
 
@@ -45,4 +44,11 @@ public class User : TimeTrackingEntity, IAggregateRoot
     
     [InverseProperty(nameof(ConversationParticipant.User))]
     public List<ConversationParticipant>? ConversationParticipants { get; set; }
+}
+
+public enum Gender
+{
+    Female = 0,
+    Male,
+    Other
 }

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Together.Application.Features.FeatureMessage.Responses;
+using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Persistence;
 using Together.Shared.Helpers;
 using Together.Shared.Messaging;
@@ -51,6 +52,8 @@ public class ListConversationQuery : IQuery<ListConversationResponse>, IPaginati
             {
                 var lastMessage = await context.Messages
                     .Include(m => m.Conversation)
+                    .ThenInclude(conversation => conversation.ConversationParticipants)
+                    .ThenInclude(conversationParticipant => conversationParticipant.User)
                     .Include(m => m.Sender)
                     .OrderByDescending(m => m.CreatedAt)
                     .FirstOrDefaultAsync(m => m.ConversationId == conversationId, cancellationToken);
@@ -61,7 +64,12 @@ public class ListConversationQuery : IQuery<ListConversationResponse>, IPaginati
                     LastMessage = lastMessage!.Text,
                     LastMessageAt = lastMessage.CreatedAt,
                     LastMessageBySenderUsername = lastMessage.Sender.Username,
-                    LastMessageBySenderAvatarUrl = lastMessage.Sender.AvatarUrl,
+                    ConversationTitle = lastMessage.Conversation.Type == ConversationType.Normal 
+                        ? lastMessage.Conversation.ConversationParticipants.FirstOrDefault(x => x.UserId != currentUserId)!.User.Username
+                        : string.Empty,
+                    ConversationImageUrl = lastMessage.Conversation.Type == ConversationType.Normal 
+                        ? lastMessage.Conversation.ConversationParticipants.FirstOrDefault(x => x.UserId != currentUserId)?.User.AvatarUrl
+                        : null,
                 });
             }
             

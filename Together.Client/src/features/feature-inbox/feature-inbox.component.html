@@ -1,5 +1,8 @@
-<div class="flex">
-  <together-inbox-recent-conversations class="w-[380px]"/>
+<div class="flex h-screen overflow-hidden">
+  <together-inbox-recent-conversations
+    [currentUsername]="(me$ | async)?.username ?? ''"
+    class="w-[380px]"
+  />
   <div class="flex-1">
     <router-outlet/>
   </div>

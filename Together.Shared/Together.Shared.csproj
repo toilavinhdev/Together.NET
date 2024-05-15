@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Together.Domain\Together.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Bogus" Version="35.5.1" />
         <PackageReference Include="Dapper" Version="2.1.35" />
@@ -21,5 +25,4 @@
         <PackageReference Include="Polly" Version="8.3.1" />
         <PackageReference Include="PredicateBuilder" Version="1.0.0" />
     </ItemGroup>
-
 </Project>

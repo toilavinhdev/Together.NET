@@ -5,6 +5,8 @@ import {
   IGetConversationResponse,
   IListConversationRequest,
   IListConversationResponse,
+  ISendMessageRequest,
+  ISendMessageResponse,
 } from '~features/feature-inbox/store/message.models';
 import { HttpClient } from '@angular/common/http';
 import { IResult } from '~shared/models';
@@ -38,6 +40,13 @@ export class MessageService extends BaseService {
     );
     return this.client
       .get<IResult<IGetConversationResponse>>(url)
+      .pipe(map((res) => res.data));
+  }
+
+  sendMessage(payload: ISendMessageRequest): Observable<ISendMessageResponse> {
+    const url = this.createUrl('/send');
+    return this.client
+      .post<IResult<ISendMessageResponse>>(url, payload)
       .pipe(map((res) => res.data));
   }
 }

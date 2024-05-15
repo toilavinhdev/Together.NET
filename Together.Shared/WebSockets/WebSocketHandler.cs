@@ -11,7 +11,7 @@ public abstract class WebSocketHandler(ConnectionManager connectionManager)
 
     public virtual Task OnConnected(string id, WebSocket socket)
     {
-        ConnectionManager.AddSocket(id, socket);
+        ConnectionManager.AddSocket(NormalizeId(id), socket);
         return Task.CompletedTask;
     }
 
@@ -37,7 +37,7 @@ public abstract class WebSocketHandler(ConnectionManager connectionManager)
     
     public async Task SendMessageAsync(string socketId, string message)
     {
-        var sockets = ConnectionManager.GetSockets(socketId);
+        var sockets = ConnectionManager.GetSockets(NormalizeId(socketId));
         if (sockets is null) return;
 
         foreach (var socket in sockets)
@@ -56,4 +56,6 @@ public abstract class WebSocketHandler(ConnectionManager connectionManager)
             }
         }
     }
+
+    private static string NormalizeId(string id) => id.ToLower();
 }

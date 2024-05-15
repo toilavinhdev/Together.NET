@@ -62,6 +62,7 @@ export class NavbarComponent implements OnInit {
   }
 
   isActive(path: string): boolean {
+    if (this.router.url.includes(path) && path.includes('/inbox')) return true;
     return this.router.url == path;
   }
 

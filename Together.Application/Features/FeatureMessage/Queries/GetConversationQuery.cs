@@ -40,21 +40,32 @@ public class GetConversationQuery(Guid conversationId, int pageIndex, int pageSi
             var totalRecord = await query.LongCountAsync(cancellationToken);
 
             var data = await query
+                .Skip(request.PageSize * (request.PageIndex - 1))
+                .Take(request.PageSize)
                 .Select(m => new MessageViewModel
                 {
                     Id = m.Id,
                     Text = m.Text,
+                    SenderId = m.Sender.Id,
                     SenderUsername = m.Sender.Username,
-                    SenderAvatarUrl = m.Sender.AvatarUrl
+                    SenderAvatarUrl = m.Sender.AvatarUrl,
+                    SendAt = m.CreatedAt,
                 })
                 .ToListAsync(cancellationToken);
 
+            var reversed = data
+                .OrderBy(m => m.SendAt)
+                .ToList();
+
             return new Result<GetConversationResponse>().IsSuccess(
                 new GetConversationResponse(
-                    data,
+                    reversed,
                     request.PageIndex,
                     request.PageSize,
-                    totalRecord));
+                    totalRecord)
+                {
+                    ConversationId = request.ConversationId
+                });
         }
     }
 }

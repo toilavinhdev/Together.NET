@@ -14,6 +14,7 @@ public class MessageEndpoint : IEndpoint
         var group = app.MapGroup("/message").WithTags("Message").RequireAuthorization();
         group.MapGet("/conversation/{conversationId:guid}", GetConversation);
         group.MapGet("/conversations", ListConversations);
+        group.MapPost("/create-conversation", CreateConversation);
         group.MapPost("/send", SendMessage);
     }
 
@@ -22,6 +23,9 @@ public class MessageEndpoint : IEndpoint
     
     private static Task<Result<ListConversationResponse>> ListConversations(ISender sender, [AsParameters]ListConversationQuery query) 
         => sender.Send(query);
+
+    private static Task<Result<Guid>> CreateConversation(ISender sender, CreateConversationCommand command) 
+        => sender.Send(command);
     
     private static Task<Result<GetConversationResponse>> GetConversation(ISender sender, Guid conversationId, int pageIndex, int pageSize) 
         => sender.Send(new GetConversationQuery(conversationId, pageIndex, pageSize));

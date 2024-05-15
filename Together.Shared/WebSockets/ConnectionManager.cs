@@ -9,7 +9,7 @@ public class ConnectionManager
     
     public ConcurrentDictionary<string, List<WebSocket>> GetAll() => _sockets;
 
-    public IEnumerable<WebSocket>? GetSockets(string id) => _sockets.GetValueOrDefault(id.ToUpper());
+    public IEnumerable<WebSocket>? GetSockets(string id) => _sockets.GetValueOrDefault(id);
     
     public string? GetId(WebSocket socket) => _sockets.FirstOrDefault(x => x.Value.Any(s => s == socket)).Key;
     

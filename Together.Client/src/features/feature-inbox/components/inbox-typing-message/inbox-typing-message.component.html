@@ -1,0 +1,19 @@
+<form [formGroup]="form" class="mx-3 flex gap-x-2">
+  <input
+    nz-input
+    formControlName="text"
+    nzSize="large"
+    class="rounded-[6px]"
+    placeholder="Nhập tin nhắn..."
+  />
+  <button
+    nz-button
+    nzSize="large"
+    nzType="primary"
+    class="rounded-[6px] w-[120px]"
+    (click)="sendMessage()"
+    [disabled]="form.invalid"
+  >
+    Gửi
+  </button>
+</form>

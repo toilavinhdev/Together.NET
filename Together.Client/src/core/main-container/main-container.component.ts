@@ -10,6 +10,9 @@ import {
   userMeSelector,
 } from '~features/feature-user/store';
 import { WebSocketService } from '~shared/services';
+import { IWebSocketMessage } from '~shared/models';
+import { webSocketTargets } from '~shared/constants';
+import { receivedMessage } from '~features/feature-inbox/store';
 
 @Component({
   selector: 'together-main-container',
@@ -27,8 +30,15 @@ export class MainContainerComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(me());
-    this.webSocketService.getClient().subscribe((val) => {
-      console.log('WebSocketReceived', val);
-    });
+    this.webSocketService
+      .getClient()
+      .subscribe((webSocketMessage: IWebSocketMessage) => {
+        console.log('WebSocketReceived', webSocketMessage);
+        if (webSocketMessage.target === webSocketTargets.ReceiveMessage) {
+          this.store.dispatch(
+            receivedMessage({ message: webSocketMessage.data }),
+          );
+        }
+      });
   }
 }

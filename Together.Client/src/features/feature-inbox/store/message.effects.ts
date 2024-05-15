@@ -7,6 +7,10 @@ import {
   listConversation,
   listConversationFailed,
   listConversationSuccess,
+  receivedMessage,
+  sendMessage,
+  sendMessageFailed,
+  sendMessageSuccess,
 } from '~features/feature-inbox/store/message.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { MessageService } from '~features/feature-inbox/store/message.service';
@@ -53,7 +57,6 @@ export class MessageEffects {
         this.messageService.getConversation(params).pipe(
           map((response) =>
             getConversationSuccess({
-              conversationId: params.conversationId,
               response,
             }),
           ),
@@ -61,6 +64,11 @@ export class MessageEffects {
         ),
       ),
     ),
+  );
+
+  getConversationSuccess$ = createEffect(
+    () => this.actions$.pipe(ofType(getConversationSuccess)),
+    { dispatch: false },
   );
 
   getConversationFailed$ = createEffect(
@@ -74,6 +82,48 @@ export class MessageEffects {
           );
         }),
       ),
+    { dispatch: false },
+  );
+
+  sendMessage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sendMessage),
+      tap(() => {
+        console.log('send', Date.now());
+      }),
+      switchMap(({ payload }) =>
+        this.messageService.sendMessage(payload).pipe(
+          map((data) => sendMessageSuccess({ data })),
+          catchError(() => of(sendMessageFailed())),
+        ),
+      ),
+    ),
+  );
+
+  sendMessageSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(sendMessageSuccess),
+        tap(({ data }) => {
+          console.log('send success', Date.now(), data.id);
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  sendMessageFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(sendMessageFailed),
+        tap(() => {
+          this.notificationService.error('Gửi tin nhắn thất bại', '');
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  receivedMessage$ = createEffect(
+    () => this.actions$.pipe(ofType(receivedMessage)),
     { dispatch: false },
   );
 }

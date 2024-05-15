@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Together.Application.Features.FeatureUser.Exceptions;
+using Together.Domain.Aggregates.UserAggregate;
 using Together.Persistence;
-using Together.Shared.Enums;
 using Together.Shared.Messaging;
 using Together.Shared.Services;
 using Together.Shared.ValueObjects;

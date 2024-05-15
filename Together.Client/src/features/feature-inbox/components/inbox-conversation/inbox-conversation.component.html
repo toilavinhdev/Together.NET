@@ -1,2 +1,28 @@
-<p>inbox-conversation works!</p>
-{{ conversationId }}
+<div>
+  <cdk-virtual-scroll-viewport #cdkVirtualScrollViewport itemSize="34" class="h-[calc(100vh-64px)] mb-[12px] px-3">
+    <ng-container *ngFor="let message of (conversation$ | async)?.messages">
+      <div class="message-item flex mt-1 mx-3">
+        <div class="flex items-start gap-x-1  flex-1">
+          @if (message.senderId !== currentUserId) {
+            <together-user-avatar
+              [url]="message.senderAvatarUrl"
+              [size]="32"
+            />
+            <div class="bg-gray-300 text-black px-3 py-2 rounded-2xl text-xs">
+              {{ message.text }}
+            </div>
+          }
+        </div>
+        <div class="flex-1">
+          @if (message.senderId === currentUserId)  {
+            <div class="bg-primary text-white px-3 py-2 rounded-2xl text-xs float-right">
+              {{ message.text }}
+            </div>
+          }
+        </div>
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
+
+  <together-inbox-typing-message [conversationId]="conversationId" class="mt-[12px]"/>
+</div>

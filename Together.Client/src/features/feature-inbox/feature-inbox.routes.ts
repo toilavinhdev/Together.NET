@@ -7,7 +7,7 @@ export const routes: Routes = [
     component: FeatureInboxComponent,
     children: [
       {
-        path: ':id',
+        path: ':conversationId',
         loadComponent: () =>
           import(
             './components/inbox-conversation/inbox-conversation.component'
