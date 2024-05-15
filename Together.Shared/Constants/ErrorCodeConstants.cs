@@ -47,4 +47,10 @@ public static class ErrorCodeConstants
         public const string ConversationExisted = "CONVERSATION_EXISTED";
         public const string ConversationNotFound = "CONVERSATION_NOT_FOUND";
     }
+    
+    public static class Post
+    {
+        public const string PostNotFound = "POST_NOT_FOUND";
+        public const string ReplyNotFound = "REPLY_NOT_FOUND";
+    }
 }

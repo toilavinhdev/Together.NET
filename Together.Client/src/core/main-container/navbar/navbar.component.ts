@@ -15,6 +15,7 @@ import { logout } from '~features/feature-auth/store';
 import { filter, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { IGetMeResponse, userMeSelector } from '~features/feature-user/store';
+import { PostCreatorModalComponent } from '~features/feature-posts/components';
 
 @Component({
   selector: 'together-navbar',
@@ -28,6 +29,7 @@ import { IGetMeResponse, userMeSelector } from '~features/feature-user/store';
     NzMenuItemComponent,
     NzMenuDividerDirective,
     AsyncPipe,
+    PostCreatorModalComponent,
   ],
   templateUrl: './navbar.component.html',
   styles: ``,

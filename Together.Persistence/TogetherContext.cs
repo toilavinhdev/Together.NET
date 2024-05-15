@@ -2,6 +2,7 @@
 using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Domain.Aggregates.FileAggregate;
 using Together.Domain.Aggregates.FollowAggregate;
+using Together.Domain.Aggregates.PostAggregate;
 using Together.Domain.Aggregates.UserAggregate;
 
 namespace Together.Persistence;
@@ -21,6 +22,14 @@ public class TogetherContext(DbContextOptions<TogetherContext> options) : DbCont
     public DbSet<ConversationParticipant> ConversationParticipants { get; init; } = default!;
     
     public DbSet<Message> Messages { get; init; } = default!;
+    
+    public DbSet<Post> Posts { get; init; } = default!;
+    
+    public DbSet<PostLike> PostLikes { get; init; } = default!;
+    
+    public DbSet<Reply> Replies { get; init; } = default!;
+    
+    public DbSet<ReplyLike> ReplyLikes { get; init; } = default!;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

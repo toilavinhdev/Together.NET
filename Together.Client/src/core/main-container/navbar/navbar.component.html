@@ -6,26 +6,27 @@
   <!-- features -->
   <div class="flex-col gap-x-3 px-[5px]">
     <div routerLink="/"
-         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon [name]="getIcon('/', 'home', 'home-filled')"/>
     </div>
     <div routerLink="/search"
-         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon [name]="getIcon('/search', 'search', 'search-filled')"/>
     </div>
-    <div class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+    <div (click)="postCreator.toggleModal()"
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon name="create"/>
     </div>
     <div routerLink="/notifications"
-         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon [name]="getIcon('/notifications', 'heart', 'heart-filled')"/>
     </div>
     <div routerLink="/inbox"
-         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon [name]="getIcon('/inbox', 'message', 'message-filled')"/>
     </div>
     <div routerLink="/profile/{{(me$ | async)?.username}}"
-         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100">
+         class="flex items-center justify-center h-[52px] w-[52px] rounded-lg cursor-pointer transition duration-200 hover:bg-gray-100 active:scale-90">
       <together-svg-icon [name]="(me$ | async)?.username === currentUsername ? 'user-filled' : 'user'"/>
     </div>
   </div>
@@ -52,4 +53,6 @@
     <li (click)="onLogout()" nz-menu-item class="px-6 py-3">Đăng xuất</li>
   </ul>
 </nz-dropdown-menu>
+
+<together-post-creator #postCreator/>
 

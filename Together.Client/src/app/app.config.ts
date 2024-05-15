@@ -40,6 +40,11 @@ import {
   MessageEffects,
   messageReducer,
 } from '~features/feature-inbox/store';
+import {
+  featurePostKey,
+  PostEffects,
+  postReducer,
+} from '~features/feature-posts/store';
 
 registerLocaleData(en);
 
@@ -48,9 +53,16 @@ const stores = {
   [featureUserKey]: userReducer,
   [featureFollowKey]: followReducer,
   [featureMessageKey]: messageReducer,
+  [featurePostKey]: postReducer,
 };
 
-const effects = [AuthEffects, UserEffects, FollowEffects, MessageEffects];
+const effects = [
+  AuthEffects,
+  UserEffects,
+  FollowEffects,
+  MessageEffects,
+  PostEffects,
+];
 
 const nzConfig: NzConfig = {
   notification: {

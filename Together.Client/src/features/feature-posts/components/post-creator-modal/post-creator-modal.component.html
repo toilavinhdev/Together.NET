@@ -1,0 +1,32 @@
+<nz-modal
+  nzCentered
+  [(nzVisible)]="visible"
+  (nzOnCancel)="handleCancel()"
+  nzOkText="Đăng"
+>
+  <ng-container *nzModalContent>
+    <div class="flex gap-x-3 items-start">
+      <together-user-avatar
+        [url]="(me$ | async)?.avatarUrl"
+        [size]="36"
+      />
+      <div class="flex-1">
+        <div class="font-medium">&#64;{{ (me$ | async)?.username }}</div>
+        <form [formGroup]="postForm">
+          <textarea
+            #content
+            formControlName="content"
+            nz-input
+            nzAutosize
+            nzBorderless
+            placeholder="hãy viết gì đấy..."
+            class="p-0 resize-none text-gray-800 font-normal"
+          ></textarea>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *nzModalFooter>
+    <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="postForm.invalid">Đăng</button>
+  </ng-container>
+</nz-modal>

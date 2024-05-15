@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Together.Domain.Abstractions;
 using Together.Domain.Aggregates.ConversationAggregate;
 using Together.Domain.Aggregates.FollowAggregate;
+using Together.Domain.Aggregates.PostAggregate;
 
 namespace Together.Domain.Aggregates.UserAggregate;
 
@@ -44,6 +45,18 @@ public class User : TimeTrackingEntity, IAggregateRoot
     
     [InverseProperty(nameof(ConversationParticipant.User))]
     public List<ConversationParticipant>? ConversationParticipants { get; set; }
+    
+    [InverseProperty(nameof(Post.CreatedBy))]
+    public List<Post>? Posts { get; set; }
+    
+    [InverseProperty(nameof(PostLike.User))]
+    public List<PostLike>? PostLikes { get; set; }
+    
+    [InverseProperty(nameof(Reply.CreatedBy))]
+    public List<Reply>? Replies { get; set; }
+    
+    [InverseProperty(nameof(ReplyLike.User))]
+    public List<ReplyLike>? ReplyLikes { get; set; }
 }
 
 public enum Gender
