@@ -13,9 +13,10 @@ public sealed class AppSettings
     public SQLServerConfig SqlServerConfig { get; set; } = default!;
 
     public JwtTokenConfig JwtTokenConfig { get; set; } = default!;
-    
 
     public SmtpConfig SmtpConfig { get; set; } = default!;
+    
+    public RedisConfig RedisConfig { get; set; } = default!;
 }
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -55,4 +56,9 @@ public class SmtpConfig
     public string Mail { get; set; } = default!;
     
     public string Password { get; set; } = default!;
+}
+
+public class RedisConfig
+{
+    public string ConnectionString { get; set; } = default!;
 }

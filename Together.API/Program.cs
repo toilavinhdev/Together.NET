@@ -5,6 +5,7 @@ using Together.API.Extensions;
 using Together.Application;
 using Together.Application.Behaviors;
 using Together.Application.WebSockets;
+using Together.Infrastructure.Redis;
 using Together.Persistence;
 using Together.Shared.ValueObjects;
 using Together.Shared.WebSockets;
@@ -34,6 +35,7 @@ services.AddDbContext<TogetherContext>(o =>
 });
 services.AddServiceCollections();
 services.AddWebSocketManager(ApplicationAssembly.Assembly);
+services.AddRedis(appSettings.RedisConfig.ConnectionString);
 
 var app = builder.Build();
 app.UseDefaultExceptionHandler();
@@ -47,3 +49,4 @@ app.MapWebSocketHandler<WebSocketConnectionHandler>("/ws");
 app.Map("/", () => Metadata.Name);
 app.Run();
 
+record WeatherForecast(string Id, string Name);

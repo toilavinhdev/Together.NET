@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Together.Application\Together.Application.csproj" />
+      <ProjectReference Include="..\Together.Infrastructure\Together.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
