@@ -1,0 +1,10 @@
+﻿version: '3.4'
+name: together-environment
+
+services: 
+  env-redis:
+    container_name: env-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

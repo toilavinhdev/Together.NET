@@ -40,7 +40,7 @@ services.AddRedis(appSettings.RedisConfig.ConnectionString);
 var app = builder.Build();
 app.UseDefaultExceptionHandler();
 app.UseCors(Metadata.Name);
-app.UseStaticFilesConfigure(appSettings.StaticFileConfig);
+app.UseStaticFilesConfigure(builder.Environment, appSettings.StaticFileConfig);
 app.UseSwaggerDocument(Metadata.Name);
 app.MapEndpointDefinitions(app.MapGroup("/api"));
 app.UseWebSockets();
