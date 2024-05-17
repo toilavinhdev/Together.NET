@@ -12,6 +12,7 @@ using Together.Shared.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.SetupEnvironment<AppSettings>(nameof(AppSettings), out var appSettings);
+builder.SetupSerilog();
 
 var services = builder.Services;
 services.AddSingleton(appSettings);
@@ -48,5 +49,3 @@ app.UseWebSockets();
 app.MapWebSocketHandler<WebSocketConnectionHandler>("/ws");
 app.Map("/", () => Metadata.Name);
 app.Run();
-
-record WeatherForecast(string Id, string Name);
